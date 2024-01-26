@@ -5,3 +5,8 @@ winget install wez.wezterm
 New-Item -Force -ItemType SymbolicLink `
     -Path "$env:USERPROFILE\.wezterm.lua" `
     -Target "$PWD\dotfiles\.wezterm.lua"
+
+# Install all dotfiles
+New-Item -Force -ItemType SymbolicLink `
+    -Path "$env:USERPROFILE\.gitconfig" `
+    -Target "$PWD\dotfiles\.gitconfig"

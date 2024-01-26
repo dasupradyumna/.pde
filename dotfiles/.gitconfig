@@ -1,0 +1,7 @@
+[user]
+	name = Dasu Pradyumna
+	email = dasupradyumna@gmail.com
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main

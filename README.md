@@ -5,9 +5,9 @@
 ### Windows
 
 It is assumed that the following software applications are already installed -
-1. WinGet
+1. **winget-cli**  
    Typically comes pre-installed.
-2. PowerShell
+2. **PowerShell**  
    Install : `$ winget install Microsoft.PowerShell`
 
 ## Setup
