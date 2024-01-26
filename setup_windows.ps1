@@ -1,10 +1,14 @@
-# Install WezTerm
+# Install WezTerm and its config
 winget install wez.wezterm
-
-# Create a symbolic link for WezTerm configuration
 New-Item -Force -ItemType SymbolicLink `
     -Path "$env:USERPROFILE\.config\wezterm" `
     -Target "$PWD\wezterm"
+
+# Install Neovim (nightly) and its config
+# TODO: installation logic
+New-Item -Force -ItemType SymbolicLink `
+    -Path "$env:LOCALAPPDATA\nvim" `
+    -Target "$PWD\nvim"
 
 # Install all dotfiles
 New-Item -Force -ItemType SymbolicLink `
