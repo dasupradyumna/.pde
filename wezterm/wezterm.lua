@@ -1,28 +1,29 @@
 local wezterm = require 'wezterm'
 
+-- switches between the argument values based on system OS
+function win_linux(windows_value, linux_value)
+  return wezterm.target_triple == 'x86_64-pc-windows-msvc' and windows_value or linux_value
+end
+
 local config = {}
 
--- always start GUI in full screen
-wezterm.on('gui-startup',function(cmd)
-  local _, _, win = wezterm.mux.spawn_window(cmd or {})
-  win:gui_window():toggle_fullscreen()
-end)
-
 -- core
-config.default_prog = { [[C:\Program Files\PowerShell\7\pwsh.exe]] }
+config.default_prog = { win_linux([[C:\Program Files\PowerShell\7\pwsh.exe]], '/usr/bin/zsh') }
 config.exit_behavior = 'CloseOnCleanExit'
 config.exit_behavior_messaging = 'Terse'
+config.automatically_reload_config = false
 
 -- tabs
 config.show_new_tab_button_in_tab_bar = false
 config.switch_to_last_active_tab_when_closing_tab = true
--- config.use_fancy_tab_bar = false
+config.use_fancy_tab_bar = false
 
 -- font
 config.font_dirs = { 'fonts' }
 config.font_locator = 'ConfigDirsOnly'
 config.font = wezterm.font 'Hurmit Nerd Font Mono'
 config.font_size = 11.0
+config.line_height = win_linux(1, 1.15)
 config.underline_position = -4
 
 -- colors
@@ -36,3 +37,11 @@ config.window_decorations = 'RESIZE'
 -- config.disable_default_mouse_bindings = true
 
 return config
+
+
+
+
+
+
+
+

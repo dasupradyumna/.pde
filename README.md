@@ -10,6 +10,16 @@ It is assumed that the following software applications are already installed -
 2. **PowerShell**  
    Install : `$ winget install Microsoft.PowerShell`
 
+### Linux
+
+It is assumed that **curl** is installed on the system.
+
 ## Setup
 
-Execute `$ .\setup_windows.ps1` in a PowerShell instance, for PDE setup on Windows.
+### Windows
+
+Execute `$ .\setup_windows.ps1` in a PowerShell instance.
+
+### Linux
+
+Execute `$ bash setup_linux.sh` in any shell instance.
