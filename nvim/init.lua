@@ -1,6 +1,6 @@
-------------------------------------------- ENTRY POINT --------------------------------------------
+-------------------------------------------- ENTRY POINT -------------------------------------------
 
 --- temporary colorscheme
 vim.cmd [[set tgc | colo retrobox]]
 
-require 'user.options'
+vim.cmd.source(vim.fn.stdpath 'config' .. '/viml/options.vim')
