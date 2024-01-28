@@ -4,5 +4,5 @@ if exists('b:user_ftplugin')
 endif
 let b:user_ftplugin = 1
 
-" allows jumping between = and ; in assignments
-setlocal matchpairs+==:;
+" instead of default 4
+setlocal shiftwidth=2
