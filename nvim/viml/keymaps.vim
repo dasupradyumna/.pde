@@ -23,6 +23,10 @@ nnoremap <Leader>cc "+y
 nnoremap <Leader>cx "+d
 nnoremap <Leader>cp "+p
 nnoremap <Leader>cP "+P
+xnoremap <Leader>cc "+y
+xnoremap <Leader>cx "+d
+xnoremap <Leader>cp "+p
+xnoremap <Leader>cP "+P
 
 "--------------------------------- NAVIGATION ---------------------------------"
 

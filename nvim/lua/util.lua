@@ -2,8 +2,11 @@
 
 local M = {}
 
-function M.vim_source(file)
-  vim.cmd.source(('%s/viml/%s.vim'):format(vim.fn.stdpath 'config', file))
-end
+M.path = {
+  config = vim.fn.stdpath 'config',
+  data = vim.fn.stdpath 'data',
+}
+
+function M.vim_source(file) vim.cmd.source(('%s/viml/%s.vim'):format(M.path.config, file)) end
 
 return M
