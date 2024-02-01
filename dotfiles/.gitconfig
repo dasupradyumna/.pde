@@ -1,7 +1,16 @@
 [user]
 	name = Dasu Pradyumna
 	email = dasupradyumna@gmail.com
-[core]
-	editor = nvim
+	signingKey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO003hXdf9skduqtJ018Yq/fvMJ7Mxb+Gzyy0ko89NCd dasupradyumna@gmail.com
 [init]
 	defaultBranch = main
+[core]
+	editor = nvim
+[commit]
+	gpgSign = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/git_allowed_signers
+[help]
+	autocorrect = 10
