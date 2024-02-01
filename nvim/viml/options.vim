@@ -16,6 +16,7 @@ set expandtab
 set formatoptions+=ro/n1
 set selectmode=key
 set shiftwidth=4
+set softtabstop=-1
 set textwidth=100
 
 "--------------------------------- UX-BEHAVIOR --------------------------------"

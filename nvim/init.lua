@@ -3,4 +3,7 @@
 --- temporary colorscheme
 vim.cmd [[set tgc | colo retrobox]]
 
-vim.cmd.source(vim.fn.stdpath 'config' .. '/viml/options.vim')
+local util = require 'util'
+
+util.vim_source 'options'
+util.vim_source 'keymaps'
