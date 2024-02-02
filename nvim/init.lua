@@ -4,6 +4,7 @@ local util = require 'util'
 
 util.vim_source 'options'
 util.vim_source 'keymaps'
+util.vim_source 'autocommands'
 
 -- bootstrap lazy.nvim plugin manager
 local lazy_path = util.path.data .. '/lazy/lazy.nvim'

@@ -29,6 +29,7 @@ set gdefault
 set ignorecase
 set keymodel=startsel,stopsel
 set matchpairs+=<:>
+set mouse=
 set report=0
 set scrolloff=4
 set sessionoptions=buffers,curdir,folds,help,options,tabpages,winsize
@@ -48,7 +49,6 @@ set whichwrap=h,l,<,>,[,]
 
 set cmdwinheight=10
 set colorcolumn=+1
-set cursorline
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
             \ . 'indent-heuristic,linematch:60,algorithm:histogram'
 set display+=uhex
@@ -56,4 +56,4 @@ set fillchars=diff:╱,eob:\  " TODO: add fold*, msgsep
 set list listchars=tab:──,trail:·,extends:~,precedes:~
 set nowrap
 set number numberwidth=2
-set signcolumn=auto:2
+set signcolumn=auto:1
