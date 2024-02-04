@@ -1,7 +1,7 @@
 local wezterm = require 'wezterm'
 
 -- switches between the argument values based on system OS
-function win_linux(windows_value, linux_value)
+local function win_linux(windows_value, linux_value)
   return wezterm.target_triple == 'x86_64-pc-windows-msvc' and windows_value or linux_value
 end
 
@@ -21,10 +21,11 @@ config.use_fancy_tab_bar = false
 -- font
 config.font_dirs = { 'fonts' }
 config.font_locator = 'ConfigDirsOnly'
-config.font = wezterm.font 'Hurmit Nerd Font Mono'
-config.font_size = 11.0
-config.line_height = win_linux(1, 1.15)
+config.font = wezterm.font 'Hermit'
+config.font_size = 11.5
 config.underline_position = -4
+config.allow_square_glyphs_to_overflow_width = 'Never'
+config.anti_alias_custom_block_glyphs = false
 
 -- colors
 config.force_reverse_video_cursor = true
@@ -36,12 +37,5 @@ config.window_decorations = 'RESIZE'
 -- keybindings
 -- config.disable_default_mouse_bindings = true
 
+
 return config
-
-
-
-
-
-
-
-
