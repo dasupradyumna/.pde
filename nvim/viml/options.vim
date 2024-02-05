@@ -52,8 +52,11 @@ set colorcolumn=+1
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
             \ . 'indent-heuristic,linematch:60,algorithm:histogram'
 set display+=uhex
-set fillchars=diff:╱,eob:\  " TODO: add fold*, msgsep
+set fillchars=diff:╱,eob:\ ,msgsep:━ " TODO: add fold*
+set laststatus=3
 set list listchars=tab:──,trail:·,extends:~,precedes:~
-set nowrap
+set noruler nowrap
 set number numberwidth=2
 set signcolumn=auto:1
+set statusline=%{%ui#statusline()%}
+set winbar=%{%ui#winbar()%}
