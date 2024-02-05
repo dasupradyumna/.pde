@@ -11,6 +11,7 @@ return {
       require('midnight').setup {
         WinBarBG = { fg = p.black, bg = c.bg},
         MsgSeparator = { link = 'Border' }, -- FIX: move to the colorscheme
+        Folded = { bg = p.gray[8] },
       }
 
       vim.cmd.colorscheme 'midnight'

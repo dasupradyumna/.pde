@@ -16,3 +16,10 @@ function! ui#statusline()
     return "%#TabLineSel# %{fnamemodify(getcwd(), ':~')}  %*%=" .
                 \ s:statusline_ruler()
 endfunction
+
+function! ui#statuscolumn_fold()
+    if nvim_treesitter#foldexpr()[0] == '>'
+        return foldclosed(v:lnum) > 0 ? '' : ''
+    endif
+    return ' '
+endfunction
