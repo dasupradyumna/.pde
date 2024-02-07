@@ -19,7 +19,6 @@ function! s:set_statuscolumn_fold_if_supported()
     " BUG: check using mapping from parser name to filetype (typically the same)
     if index(l:supported, &filetype) == -1 | return | endif
 
-    " TODO: try signcolumn=number option? Because signcolumn is occupying 2 columns
     let &l:statuscolumn = '%s%=%l%{ui#statuscolumn_fold()} '
 endfunction
 

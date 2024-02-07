@@ -10,8 +10,10 @@ return {
       local c = require('midnight.colors').components
       require('midnight').setup {
         WinBarBG = { fg = p.black, bg = c.bg},
-        MsgSeparator = { link = 'Border' }, -- FIX: move to the colorscheme
         Folded = { bg = p.gray[8] },
+        -- FIX: move to the colorscheme
+        MsgSeparator = { link = 'Border' },
+        DiffviewDiffDeleteDim = { fg = p.gray[7] },
       }
 
       vim.cmd.colorscheme 'midnight'

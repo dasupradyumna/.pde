@@ -52,7 +52,7 @@ set colorcolumn=+1
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
             \ . 'indent-heuristic,linematch:60,algorithm:histogram'
 set display+=uhex
-set fillchars=diff:╱,eob:\ ,fold:\ ,msgsep:━
+set fillchars=diff:╳,eob:\ ,fold:\ ,msgsep:━
 set foldtext=
 set laststatus=3
 set list listchars=tab:──,trail:·,extends:~,precedes:~
