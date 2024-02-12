@@ -6,7 +6,7 @@ return {
   keys = {
     { '<Leader>gd', '<Cmd>DiffviewOpen<CR>', noremap = true },
     { '<Leader>gh', '<Cmd>DiffviewFileHistory<CR>', noremap = true },
-    { '<Leader>gH', '<Cmd>DiffviewFileHistory ', noremap = true },
+    { '<Leader>gH', ':DiffviewFileHistory ', noremap = true },
   },
   config = function()
     local act = require 'diffview.config'.actions
@@ -15,15 +15,16 @@ return {
       view = { merge_tool = { layout = 'diff4_mixed' } },
       file_history_panel = { win_config = { position = 'top' } },
       commit_log_panel = { win_config = { border = 'rounded' } },
-      hooks = {},
+      hooks = {
+        view_opened = function() vim.opt_local.signcolumn = 'no' end,
+        diff_buf_read = function() vim.opt_local.signcolumn = 'no' end,
+      },
       keymaps = {
         disable_defaults = true,
         view = {
           q = act.close,
           ['<Leader>f'] = act.focus_files,
           ['<Leader>F'] = act.toggle_files,
-          ['<S-Tab>'] = act.select_prev_entry,
-          ['<Tab>'] = act.select_next_entry,
           -- CHECK: if below mappings work in a merge conflict state
           ['<Leader>gmn'] = act.next_conflict,
           ['<Leader>gmN'] = act.prev_conflict,

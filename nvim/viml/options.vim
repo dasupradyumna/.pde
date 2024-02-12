@@ -37,12 +37,12 @@ set shortmess=aoOsIcCF
 set sidescrolloff=4
 set smartcase
 set spell spelloptions=camel
-let &spellfile = s:config_path . '/spell/en.utf-8.add'
+let &spellfile = s:config_path .. '/spell/en.utf-8.add'
 set splitbelow splitright
 set startofline
 set switchbuf+=useopen
 set updatetime=500
-let &verbosefile = stdpath('data') . '/verbose.txt'
+let &verbosefile = stdpath('data') .. '/verbose.txt'
 set whichwrap=h,l,<,>,[,]
 
 "--------------------------------- UI-DISPLAY ---------------------------------"
@@ -50,7 +50,7 @@ set whichwrap=h,l,<,>,[,]
 set cmdwinheight=10
 set colorcolumn=+1
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
-            \ . 'indent-heuristic,linematch:60,algorithm:histogram'
+            \ .. 'indent-heuristic,linematch:60,algorithm:histogram'
 set display+=uhex
 set fillchars=diff:╳,eob:\ ,fold:\ ,msgsep:━
 set foldtext=
