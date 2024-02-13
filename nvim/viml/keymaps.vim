@@ -53,5 +53,3 @@ nnoremap <C-Up> <C-W>+
 nnoremap <C-Down> <C-W>-
 nnoremap <C-Left> <C-W><
 nnoremap <C-Right> <C-W>>
-
-"------------------------------------------------------------------------------"

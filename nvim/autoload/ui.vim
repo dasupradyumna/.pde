@@ -6,32 +6,32 @@ const s:diffview_panel = { 'File': 'status', 'FileHistory': 'log', 'FHOption': '
 const s:diffview_buf = { ':0:': 'INDEX', ':1:': 'BASE', ':2:': 'CURRENT', ':3:': 'INCOMING' }
 function! s:winbar_bufname_diffview(bufname)
     " handle working directory buffers
-    if match(a:bufname, '^diffview://') < 0 | return 'WORK-TREE: ' .. a:bufname | endif
+    if a:bufname->match('^diffview://') < 0 | return 'WORK-TREE: ' .. a:bufname | endif
 
     " handle empty buffer
     if a:bufname == 'diffview://null' | return 'NULL' | endif
 
     " handle side panel buffers
-    let name = matchstr(a:bufname, '^diffview:///panels/\d/Diffview\zs.*\zePanel$')
-    if !empty(name) | return 'git-' .. s:diffview_panel[name] | endif
+    let name = a:bufname->matchstr('^diffview:///panels/\d/Diffview\zs.*\zePanel$')
+    if !name->empty() | return 'git-' .. s:diffview_panel[name] | endif
 
     " handle revision buffers
     let pattern = printf('\v^diffview://%s/.git/([[:alnum:]:]+)/(.+)$',
                 \ v:lua.vim.fs.normalize(getcwd()))
-    let context = split(substitute(a:bufname, pattern, '\1 \2', ''))
-    let context[0] = get(s:diffview_buf, context[0], 'COMMIT:' .. context[0])
-    let context[1] = fnamemodify(context[1], ':gs;/;\\;')
-    return join(context, ': ')
+    let context = a:bufname->substitute(pattern, '\1 \2', '')->split()
+    let context[0] = s:diffview_buf->get(context[0], 'COMMIT:' .. context[0])
+    let context[1] = context[1]->fnamemodify(':gs;/;\\;')
+    return context->join(': ')
 endfunction
 
 function! s:winbar_bufname()
     let bufname = expand('%:.')
 
     " handle empty buffer
-    if empty(bufname) | return '[ EMPTY ]' | endif
+    if bufname->empty() | return '[ EMPTY ]' | endif
 
     " handle git commit message editor
-    if match(bufname, '\v^\.git[\\/]COMMIT_EDITMSG$') == 0 | return 'git-commit message' | endif
+    if bufname->match('\v^\.git[\\/]COMMIT_EDITMSG$') == 0 | return 'git-commit message' | endif
 
     " handle diffview.nvim buffers
     if util#is_diffview_tabpage() | return s:winbar_bufname_diffview(bufname) | endif
@@ -41,17 +41,19 @@ endfunction
 
 const s:gitsigns_hl = { '+': 'GitNew', '~': 'GitDirty', '-': 'GitDeleted' }
 function! s:winbar_gitsigns()
-    let status = split(get(b:, 'gitsigns_status', ''))
-    if empty(status) || util#is_diffview_tabpage() | return '' | endif
+    let status = b:->get('gitsigns_status', '')->split()
+    if status->empty() || util#is_diffview_tabpage() | return '' | endif
 
-    return join(add(map(status, 'printf("%%#%s#%s", s:gitsigns_hl[v:val[0]], v:val)'),
-                \ '%#WinBarBG#'))
+    return status->map('printf("%%#%s#%s", s:gitsigns_hl[v:val[0]], v:val)')
+                \ ->add('%#WinBarBG#')
+                \ ->join()
 endfunction
 
 function! s:winbar_filetype()
-    if match(&l:filetype, '^Diffview\|gitcommit') == 0 | return '' | endif
+    let filetype = &l:filetype
+    if filetype->match('^Diffview\|gitcommit') == 0 | return '' | endif
 
-    return printf('%%* %s ', &l:filetype == '' ? '-' : toupper(&l:filetype))
+    return printf('%%* %s ', filetype->empty() ? '-' : filetype->toupper())
 endfunction
 
 function! ui#winbar()
@@ -65,12 +67,12 @@ endfunction
 "--------------------------------- STATUSLINE ---------------------------------"
 
 function! s:statusline_ruler()
-    let width = 2 * strlen(nvim_buf_line_count(0)) + 9
+    let width = 2 * nvim_buf_line_count(0)->len() + 9
     return '%' .. width .. '( %l/%L,%v %P%) '
 endfunction
 
 function! ui#statusline()
-    return "%#TabLineSel# %{fnamemodify(getcwd(),':~')}  %*%=" .. s:statusline_ruler()
+    return "%#TabLineSel# %{getcwd()->fnamemodify(':~')}  %*%=" .. s:statusline_ruler()
 endfunction
 
 "-------------------------------- STATUSCOLUMN --------------------------------"

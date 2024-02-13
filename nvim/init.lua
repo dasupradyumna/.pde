@@ -8,7 +8,7 @@ util.vim_source 'autocommands'
 
 -- bootstrap lazy.nvim plugin manager
 local lazy_path = util.path.data .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazy_path) then
+if not vim.uv.fs_stat(lazy_path) then
   vim.fn.system {
     'git',
     'clone',
