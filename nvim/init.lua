@@ -1,6 +1,6 @@
 -------------------------------------------- ENTRY POINT -------------------------------------------
 
-local util = require 'util'
+local util = require 'user.util'
 
 util.vim_source 'options'
 util.vim_source 'keymaps'
@@ -15,11 +15,14 @@ if not vim.uv.fs_stat(lazy_path) then
     '--filter=blob:none',
     'https://github.com/folke/lazy.nvim',
     '--branch=stable',
-    lazy_path
+    lazy_path,
   }
 end
 vim.opt.runtimepath:prepend(lazy_path)
 require('lazy').setup('plugins', {
   lockfile = util.path.data .. '/lazy-lock.json',
+  -- CHECK: does this work & detect local plugin repos?
+  dev = { path = '~/neovim_plugins', patterns = { 'dasupradyumna' }, fallback = true },
+  install = { colorscheme = { 'retrobox' } },
   ui = { size = { width = 0.999, height = 0.95 }, border = 'rounded' },
 })
