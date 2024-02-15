@@ -3,12 +3,12 @@
 "-------------------------------- USER-DEFINED --------------------------------"
 
 " TODO: exclude all filetypes that have a formatter / LSP
-const s:trim_exclude = [ 'gitcommit', 'markdown' ]
+const s:trim_exclude = [ 'gitcommit', 'lua', 'markdown' ]
 function! s:trim_trailing_whitespace()
     if s:trim_exclude->index(&l:filetype) >= 0 | return | endif
 
     let view = winsaveview()
-    %s:\s\+$::e
+    %substitute:\s\+$::e
     call winrestview(view)
 endfunction
 
@@ -39,6 +39,9 @@ augroup __user__
 
     " display folds in statuscolumn when supported
     autocmd BufWinEnter * call <SID>set_statuscolumn_foldexpr()
+
+    " format buffers using the configured formatters
+    autocmd BufWritePost * call format#buffer()
 
 augroup END
 

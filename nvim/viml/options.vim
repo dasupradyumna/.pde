@@ -4,7 +4,8 @@
 
 let s:config_path = stdpath('config')
 if has('win32')
-    set shell=pwsh shellcmdflag=-Command
+    set shell=pwsh shellcmdflag=-Command shellxquote=
+    " HACK: excluding drive modifier on Windows works for 'spellfile' option
     let s:config_path = s:config_path[2:]
 endif
 

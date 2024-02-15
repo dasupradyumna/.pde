@@ -7,7 +7,7 @@ let g:maplocalleader = ' '
 
 map <Space> <NOP>
 map <BS> <NOP>
-map! <C-C> <Esc>
+inoremap <C-C> <Esc>
 noremap ; :
 noremap : ;
 
@@ -15,6 +15,7 @@ noremap : ;
 
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
+nnoremap gh K
 nnoremap K i<CR><Esc>
 nnoremap U <C-R>
 
