@@ -12,6 +12,7 @@ return {
         WinBarBG = { fg = p.black, bg = c.bg },
         Folded = { bg = p.gray[8] },
         -- FIX: move to the colorscheme
+        LazyReasonRequire = { link = 'Parameter' },
         MsgSeparator = { link = 'Border' },
         DiffviewDiffDeleteDim = { fg = p.gray[7] },
       }

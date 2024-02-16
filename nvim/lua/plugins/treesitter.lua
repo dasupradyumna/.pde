@@ -2,6 +2,7 @@
 
 return {
   'nvim-treesitter/nvim-treesitter',
+  lazy = true,
   build = ':TSUpdate', -- update treesitter parsers along with the plugin
   config = function()
     require('nvim-treesitter.configs').setup { ---@diagnostic disable-line: missing-fields

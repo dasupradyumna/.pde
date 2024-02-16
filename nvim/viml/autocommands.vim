@@ -16,9 +16,9 @@ function! s:set_statuscolumn_foldexpr()
     " reset statuscolumn to default (if an existing parser is uninstalled)
     setlocal statuscolumn<
 
-    let supported = v:lua.require('nvim-treesitter.info').installed_parsers()
-    " BUG: check using mapping from parser name to filetype (typically the same)
-    if supported->index(&l:filetype) < 0 && !util#is_diffview_tabpage() | return | endif
+    let installed = v:lua.require('nvim-treesitter.info').installed_parsers()
+    let required = v:lua.vim.treesitter.language.get_lang(&l:filetype)
+    if installed->index(required) < 0 && !util#is_diffview_tabpage() | return | endif
     if util#is_diffview_panel() | return | endif
 
     let &l:statuscolumn ..= '%#LineNr#%{ui#statuscolumn_fold()} '
@@ -28,7 +28,10 @@ augroup __user__
     autocmd!
 
     " trim all trailing whitespace before writing buffer
-    autocmd BufWritePre * call <SID>trim_trailing_whitespace()
+    autocmd BufWritePre * call s:trim_trailing_whitespace()
+
+    " format buffers using the configured formatters
+    autocmd BufWritePost * call format#buffer()
 
     " enable cursorline only in focused window
     autocmd VimEnter,WinEnter * setlocal cursorline
@@ -38,10 +41,7 @@ augroup __user__
     autocmd BufWinEnter * if &buftype != '' | setlocal colorcolumn= | endif
 
     " display folds in statuscolumn when supported
-    autocmd BufWinEnter * call <SID>set_statuscolumn_foldexpr()
-
-    " format buffers using the configured formatters
-    autocmd BufWritePost * call format#buffer()
+    autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
 
 augroup END
 

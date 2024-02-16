@@ -1,9 +1,12 @@
 ------------------------------------- LANGUAGE SERVER PROTOCOL -------------------------------------
 
+local installed_lsps = { lua = 'lua_ls' }
+
 return {
-  -- TODO: add code to automatically install required tools on first startup
+  -- TODO: automatically install missing tools
   {
     'williamboman/mason.nvim',
+    lazy = true,
     opts = {
       max_concurrent_installers = 8,
       ui = {
@@ -17,7 +20,8 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'williamboman/mason.nvim' },
+    ft = vim.tbl_keys(installed_lsps),
+    dependencies = 'williamboman/mason.nvim',
     config = function()
       local lspconfig = require 'lspconfig'
 
@@ -39,8 +43,8 @@ return {
 
           nnoremap('gd', vim.lsp.buf.definition, { reuse_win = true })
           nnoremap('gD', vim.lsp.buf.declaration, { reuse_win = true })
-          nnoremap('gh', vim.lsp.buf.signature_help)
-          nnoremap('gH', vim.lsp.buf.hover)
+          nnoremap('gh', vim.lsp.buf.hover)
+          nnoremap('gH', vim.lsp.buf.signature_help)
           nnoremap('gn', vim.diagnostic.goto_next)
           nnoremap('gN', vim.diagnostic.goto_prev)
           nnoremap('gr', vim.lsp.buf.rename)
@@ -49,9 +53,9 @@ return {
         end,
       })
 
-      -- TODO: lazy start language servers based on filetype
-      local supported = { 'lua_ls' }
-      for _, lsp in ipairs(supported) do
+      -- TODO: setup language servers lazily based on filetype
+      --       currently all are setup when plugin is loaded
+      for _, lsp in pairs(installed_lsps) do
         lspconfig[lsp].setup(require('user.lspconfig.' .. lsp))
       end
 

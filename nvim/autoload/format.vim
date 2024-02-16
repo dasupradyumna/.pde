@@ -7,7 +7,7 @@ function! s:config_resolver(filename)
 endfunction
 
 const s:lua = { 'exe': stdpath('data') .. '/mason/bin/stylua', 'config': 'stylua.toml',
-            \ 'command': {->[ s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.') ]} }
+            \ 'command': {-> [ s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.') ]} }
 
 "----------------------------- FORMATTER FUNCTION -----------------------------"
 
