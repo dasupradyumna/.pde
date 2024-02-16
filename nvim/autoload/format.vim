@@ -12,6 +12,10 @@ const s:lua = { 'exe': stdpath('data') .. '/mason/bin/stylua', 'config': 'stylua
 "----------------------------- FORMATTER FUNCTION -----------------------------"
 
 function! format#buffer()
+    " disable formatting in diffview.nvim tabpage for revision buffers
+    " TODO: remove this if formatting is performed on buffer content instead of files
+    if util#is_diffview_tabpage() && expand('%:.')->match('^diffview://') >= 0 | return | endif
+
     let formatter = s:->get(&l:filetype, {})
     if formatter->empty() | return | endif
 

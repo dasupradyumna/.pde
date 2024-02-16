@@ -11,14 +11,20 @@ return {
     },
     config = function()
       local act = require('diffview.config').actions
+      local lib = require 'diffview.lib'
       require('diffview').setup {
         enhanced_diff_hl = true,
         view = { merge_tool = { layout = 'diff4_mixed' } },
         file_history_panel = { win_config = { position = 'top' } },
         commit_log_panel = { win_config = { border = 'rounded' } },
         hooks = {
-          view_opened = function() vim.opt_local.signcolumn = 'no' end,
+          view_opened = function()
+            vim.opt_local.signcolumn = 'no'
+            vim.t.diffview_toplevel_dir = lib.get_current_view().adapter.ctx.toplevel
+          end,
           diff_buf_read = function() vim.opt_local.signcolumn = 'no' end,
+          view_enter = function() require('gitsigns').toggle_current_line_blame(false) end,
+          view_leave = function() require('gitsigns').toggle_current_line_blame(true) end,
         },
         keymaps = {
           disable_defaults = true,

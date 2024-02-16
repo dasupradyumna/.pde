@@ -16,8 +16,7 @@ function! s:winbar_bufname_diffview(bufname)
     if !name->empty() | return 'git-' .. s:diffview_panel[name] | endif
 
     " handle revision buffers
-    let pattern = printf('\v^diffview://%s/.git/([[:alnum:]:]+)/(.+)$',
-                \ v:lua.vim.fs.normalize(getcwd()))
+    let pattern = printf('\v^diffview://%s/.git/([[:alnum:]:]+)/(.+)$', t:diffview_toplevel_dir)
     let context = a:bufname->substitute(pattern, '\1 \2', '')->split()
     let context[0] = s:diffview_buf->get(context[0], 'COMMIT:' .. context[0])
     let context[1] = context[1]->fnamemodify(':gs;/;\\;')
