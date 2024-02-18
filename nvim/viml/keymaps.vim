@@ -18,6 +18,8 @@ nnoremap <Leader>O O<Esc>
 nnoremap gh K
 nnoremap K i<CR><Esc>
 nnoremap U <C-R>
+inoremap <Left> <C-G>U<Left>
+inoremap <Right> <C-G>U<Right>
 
 " system clipboard
 nnoremap <Leader>cc "+y
@@ -33,8 +35,6 @@ xnoremap <Leader>cP "+P
 
 nnoremap <C-U> <C-U>zz
 nnoremap <C-D> <C-D>zz
-nnoremap H zk
-nnoremap L zj
 
 " search
 nnoremap n nzz

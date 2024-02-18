@@ -48,6 +48,6 @@ return {
     -- enable folding using treesitter nodes
     vim.o.foldmethod = 'expr'
     vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-    vim.o.foldlevelstart = 99
+    vim.o.foldlevel = 99
   end,
 }
