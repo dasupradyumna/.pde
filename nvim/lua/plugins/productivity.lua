@@ -57,6 +57,14 @@ return {
       -- navigate todo items in a buffer
       vim.keymap.set('n', '[t', todo.jump_prev, { remap = false, nowait = true })
       vim.keymap.set('n', ']t', todo.jump_next, { remap = false, nowait = true })
+
+      require('user.util').throttle.register_wrapper(
+        'todo_search',
+        2000,
+        require('todo-comments.search').search,
+        vim.fn['ui#update_todo_stats'],
+        { disable_not_found_warnings = true }
+      )
     end,
   },
 }

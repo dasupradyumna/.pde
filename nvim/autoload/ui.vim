@@ -2,8 +2,10 @@
 
 "----------------------------------- WINBAR -----------------------------------"
 
-const s:diffview_panel = { 'File': 'status', 'FileHistory': 'log', 'FHOption': 'log options' }
-const s:diffview_buf = { ':0:': 'INDEX', ':1:': 'BASE', ':2:': 'CURRENT', ':3:': 'INCOMING' }
+const s:diffview = {
+            \ 'panel': { 'File': 'status', 'FileHistory': 'log', 'FHOption': 'log options' },
+            \ 'buffer': { ':0:': 'INDEX', ':1:': 'BASE', ':2:': 'CURRENT', ':3:': 'INCOMING' }
+            \ }
 function! s:winbar_bufname_diffview(bufname)
     " handle working directory buffers
     if a:bufname->match('^diffview://') < 0 | return 'WORK-TREE: ' .. a:bufname | endif
@@ -13,18 +15,21 @@ function! s:winbar_bufname_diffview(bufname)
 
     " handle side panel buffers
     let name = a:bufname->matchstr('^diffview:///panels/\d/Diffview\zs.*\zePanel$')
-    if !name->empty() | return 'git-' .. s:diffview_panel[name] | endif
+    if !name->empty() | return 'git-' .. s:diffview.panel[name] | endif
 
     " handle revision buffers
     let pattern = printf('\v^diffview://%s/.git/([[:alnum:]:]+)/(.+)$', t:diffview_toplevel_dir)
     let context = a:bufname->substitute(pattern, '\1 \2', '')->split()
-    let context[0] = s:diffview_buf->get(context[0], 'COMMIT:' .. context[0])
+    let context[0] = s:diffview.buffer->get(context[0], 'COMMIT:' .. context[0])
     let context[1] = context[1]->fnamemodify(':gs;/;\\;')
     return context->join(': ')
 endfunction
 
 function! s:winbar_bufname()
     let bufname = expand('%:.')
+
+    " handle help buffers
+    if &l:filetype == 'help' | return bufname->fnamemodify(':t:r') | endif
 
     " handle empty buffer
     if bufname->empty() | return '[ EMPTY ]' | endif
@@ -65,13 +70,42 @@ endfunction
 
 "--------------------------------- STATUSLINE ---------------------------------"
 
+let s:todo = {
+            \ 'render': { 'FIX': '󰠭 ', 'HACK': '󰈸 ', 'NOTE': '󰅺 ', 'PERF': '󰥔 ',
+            \             'TEST': '󰖷 ', 'TODO': ' ', 'WARN': ' ' },
+            \ 'stats': {},
+            \ }
+function! ui#update_todo_stats(entries)
+    let s:todo.stats = {}
+    for entry in a:entries
+        let s:todo.stats[entry.tag] = s:todo.stats->get(entry.tag, 0) + 1
+    endfor
+endfunction
+function! s:statusline_todo_stats()
+    let [ok, config] = util#try_require('todo-comments.config')
+    if !ok || !config.loaded | return '' | endif
+
+    " update todo statistics using a throttled search function from todo-comments.nvim
+    lua require('user.util').throttle.wrappers.todo_search()
+
+    let out = []
+    for keyword in s:todo.stats->keys()->sort()
+        call add(out, printf('%%#TodoFg%s#%s%d',
+                    \ keyword, s:todo.render[keyword], s:todo.stats[keyword]))
+    endfor
+    return out->add('')->join()
+endfunction
+
 function! s:statusline_ruler()
-    let width = 2 * nvim_buf_line_count(0)->len() + 9
-    return '%' .. width .. '( %l/%L,%v %P%) '
+    let width = 2 * nvim_buf_line_count(0)->len() + 1
+    return ' %' .. width .. '(%l/%L%),%2(%v%) %P '
 endfunction
 
 function! ui#statusline()
-    return "%#TabLineSel# %{getcwd()->fnamemodify(':~')}  %*%=" .. s:statusline_ruler()
+    return printf('%%#TabLineSel# %s  %%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
+                \ getcwd()->fnamemodify(':~'),
+                \ s:statusline_todo_stats(),
+                \ s:statusline_ruler())
 endfunction
 
 "-------------------------------- STATUSCOLUMN --------------------------------"
