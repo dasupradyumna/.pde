@@ -19,7 +19,7 @@ function! s:set_statuscolumn_foldexpr()
     let installed = v:lua.require('nvim-treesitter.info').installed_parsers()
     let required = v:lua.vim.treesitter.language.get_lang(&l:filetype)
     if installed->index(required) < 0 && !util#is_diffview_tabpage() | return | endif
-    if util#is_diffview_panel() | return | endif
+    if util#is_diffview_panel() || &l:filetype == 'help' | return | endif
 
     let &l:statuscolumn ..= '%#LineNr#%{ui#statuscolumn_fold()} '
 endfunction

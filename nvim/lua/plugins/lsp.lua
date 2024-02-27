@@ -35,10 +35,10 @@ return {
           ),
         },
         on_attach = function(_, bufnr)
-          local function nnoremap(lhs, rhs, opts)
+          local function nnoremap(lhs, rhs, args)
             ---@diagnostic disable-next-line: redefined-local
-            local rhs = opts and function() rhs(opts) end or rhs
-            vim.keymap.set('n', lhs, rhs, { noremap = true, nowait = true, buffer = bufnr })
+            local rhs = args and function() rhs(args) end or rhs
+            vim.keymap.set('n', lhs, rhs, { buffer = bufnr })
           end
 
           nnoremap('gd', vim.lsp.buf.definition, { reuse_win = true })

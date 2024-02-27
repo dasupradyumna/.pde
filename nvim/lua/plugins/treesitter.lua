@@ -2,7 +2,6 @@
 
 return {
   'nvim-treesitter/nvim-treesitter',
-  lazy = true,
   build = ':TSUpdate', -- update treesitter parsers along with the plugin
   config = function()
     require('nvim-treesitter.configs').setup { ---@diagnostic disable-line: missing-fields
@@ -38,9 +37,8 @@ return {
         enable = true,
         keymaps = {
           init_selection = '<CR>',
-          node_incremental = '<Tab>',
-          node_decremental = '<S-Tab>',
-          scope_incremental = '<CR>',
+          node_incremental = '<C-N>',
+          node_decremental = '<C-P>',
         },
       },
     }

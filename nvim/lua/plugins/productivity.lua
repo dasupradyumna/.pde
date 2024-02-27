@@ -1,5 +1,8 @@
 --------------------------------------- PRODUCTIVITY PLUGINS ---------------------------------------
 
+local function nxomap(lhs, rhs) vim.keymap.set({ 'n', 'x', 'o' }, lhs, rhs, {}) end
+local function nmap(lhs, rhs) vim.keymap.set('n', lhs, rhs, {}) end
+
 return {
   {
     'ggandor/leap.nvim',
@@ -9,13 +12,6 @@ return {
       config.special_keys.next_target = '<C-N>'
       config.special_keys.prev_target = '<C-P>'
       require('leap.user').set_repeat_keys('<C-N>', '<C-P>')
-
-      local function nxomap(lhs, rhs)
-        vim.keymap.set({ 'n', 'x', 'o' }, lhs, rhs, { nowait = true, remap = false, silent = true })
-      end
-      local function nmap(lhs, rhs)
-        vim.keymap.set('n', lhs, rhs, { nowait = true, remap = false, silent = true })
-      end
 
       -- TODO: replace below with custom behavior using leap.leap() function
       nxomap('f', '<Plug>(leap-forward-to)')
@@ -55,8 +51,8 @@ return {
       }
 
       -- navigate todo items in a buffer
-      vim.keymap.set('n', '[t', todo.jump_prev, { remap = false, nowait = true })
-      vim.keymap.set('n', ']t', todo.jump_next, { remap = false, nowait = true })
+      nmap('[t', todo.jump_prev)
+      nmap(']t', todo.jump_next)
 
       require('user.util').throttle.register_wrapper(
         'todo_search',

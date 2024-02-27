@@ -50,13 +50,14 @@ set whichwrap=h,l,<,>,[,]
 
 set cmdwinheight=10
 set colorcolumn=+1
+set cursorlineopt=line
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
             \ .. 'indent-heuristic,linematch:60,algorithm:histogram'
 set display+=uhex
 set fillchars=diff:╳,eob:\ ,fold:\ ,msgsep:━
 set foldtext=
 set laststatus=3
-set list listchars=tab:──,trail:·,extends:~,precedes:~
+set list listchars=tab:──,trail:·
 set noruler nowrap
 set number numberwidth=2
 set signcolumn=auto:1

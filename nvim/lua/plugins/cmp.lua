@@ -50,13 +50,11 @@ return {
     'L3MON4D3/LuaSnip',
     lazy = true,
     config = function()
-      local luasnip = require 'luasnip'
-      local function isnoremap(lhs, rhs)
-        vim.keymap.set({ 'i', 's' }, lhs, rhs, { silent = true, noremap = true, nowait = true })
-      end
+      local function ismap(lhs, rhs) vim.keymap.set({ 'i', 's' }, lhs, rhs, {}) end
 
-      isnoremap('<C-F>', function() luasnip.jump(1) end)
-      isnoremap('<C-B>', function() luasnip.jump(-1) end)
+      local luasnip = require 'luasnip'
+      ismap('<C-F>', function() luasnip.jump(1) end)
+      ismap('<C-B>', function() luasnip.jump(-1) end)
     end,
   },
   {
@@ -69,6 +67,7 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-nvim-lsp-signature-help',
       'saadparwaiz1/cmp_luasnip',
+      'L3MON4D3/LuaSnip',
     },
     config = function()
       local cmp = require 'cmp'
@@ -76,11 +75,11 @@ return {
       -- overall autocompletion engine setup
       cmp.setup {
         mapping = {
-          ['<Tab>'] = cmp.mapping.select_next_item(),
-          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<C-N>'] = cmp.mapping.select_next_item(),
+          ['<C-P>'] = cmp.mapping.select_prev_item(),
           ['<C-U>'] = cmp.mapping.scroll_docs(-4),
           ['<C-D>'] = cmp.mapping.scroll_docs(4),
-          ['<C-J>'] = function(fallback)
+          ['<Tab>'] = function(fallback)
             _ = cmp.confirm() or (is_preceding_character_text() and cmp.complete() or fallback())
           end,
           ['<C-Q>'] = function() _ = cmp.abort() or cmp.complete() end,
@@ -126,9 +125,9 @@ return {
       -- command line autocompletion setup
       local common_config = {
         mapping = {
-          ['<Tab>'] = { c = cmp.mapping.select_next_item() },
-          ['<S-Tab>'] = { c = cmp.mapping.select_prev_item() },
-          ['<C-J>'] = { c = function() _ = cmp.confirm() or cmp.complete() end },
+          ['<C-N>'] = { c = cmp.mapping.select_next_item() },
+          ['<C-P>'] = { c = cmp.mapping.select_prev_item() },
+          ['<Tab>'] = { c = function() _ = cmp.confirm() or cmp.complete() end },
         },
         formatting = { fields = { 'abbr' }, format = function(_, item) return item end },
       }

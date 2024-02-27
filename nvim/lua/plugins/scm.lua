@@ -10,23 +10,23 @@ return {
       current_line_blame_opts = { delay = 250 },
       current_line_blame_formatter = '    <author> (<author_time>) :: <summary>',
       current_line_blame_formatter_nc = '    [ not committed ]',
+      numhl = true,
+      signcolumn = false,
 
       on_attach = function(bufnr)
-        local function nnoremap(lhs, rhs)
-          vim.keymap.set('n', lhs, rhs, { noremap = true, nowait = true, buffer = bufnr })
-        end
+        local function nmap(lhs, rhs) vim.keymap.set('n', lhs, rhs, { buffer = bufnr }) end
         local gs = require 'gitsigns'
-        nnoremap('<Leader>gl', gs.toggle_current_line_blame)
-        nnoremap('<Leader>gp', gs.preview_hunk_inline)
-        nnoremap('<Leader>gn', gs.next_hunk)
-        nnoremap('<Leader>gN', gs.prev_hunk)
-        nnoremap('<Leader>gS', gs.select_hunk)
-        nnoremap('<Leader>gsh', gs.stage_hunk)
-        nnoremap('<Leader>gsb', gs.stage_buffer)
-        nnoremap('<Leader>grh', gs.reset_hunk)
-        nnoremap('<Leader>grb', gs.reset_buffer)
-        nnoremap('<Leader>guh', gs.undo_stage_hunk)
-        nnoremap('<Leader>gub', gs.reset_buffer_index)
+        nmap('<Leader>gl', gs.toggle_current_line_blame)
+        nmap('<Leader>gp', gs.preview_hunk_inline)
+        nmap('<Leader>gn', gs.next_hunk)
+        nmap('<Leader>gN', gs.prev_hunk)
+        nmap('<Leader>gS', gs.select_hunk)
+        nmap('<Leader>gsh', gs.stage_hunk)
+        nmap('<Leader>gsb', gs.stage_buffer)
+        nmap('<Leader>grh', gs.reset_hunk)
+        nmap('<Leader>grb', gs.reset_buffer)
+        nmap('<Leader>guh', gs.undo_stage_hunk)
+        nmap('<Leader>gub', gs.reset_buffer_index)
       end,
     },
   },
