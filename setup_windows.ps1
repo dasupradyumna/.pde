@@ -15,6 +15,9 @@ New-Item -Force -ItemType SymbolicLink `
     -Path "$env:USERPROFILE\.gitconfig" `
     -Target "$PWD\dotfiles\.gitconfig"
 
+# Install RipGrep
+winget install BurntSushi.ripgrep.MSVC
+
 # XXX: refactor below code
 
 # Uninstall and reinstall git to use external OpenSSH

@@ -15,3 +15,6 @@ ln -sf "$PWD/nvim" ~/.config/nvim
 
 # Install all dotfiles
 ln -sf "$PWD/dotfiles/.gitconfig" ~/.gitconfig
+
+# Install RipGrep
+sudo apt install -y ripgrep
