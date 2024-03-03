@@ -1,5 +1,8 @@
 -------------------------------------------- ENTRY POINT -------------------------------------------
 
+-- global user data
+vim.g.user = vim.empty_dict()
+
 local util = require 'user.util'
 
 util.vim_source 'options'

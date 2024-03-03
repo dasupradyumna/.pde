@@ -62,7 +62,9 @@ M.throttle = {
         )
 
         self.status = M.throttle.status.RUNNING
-        vim.schedule_wrap(self.callback)(select('#', ...) > 0 and ... or unpack(self.args))
+        vim.schedule_wrap(self.callback)(
+          unpack(select('#', ...) > 0 and { ... } or vim.deepcopy(self.args))
+        )
         self.status = self.status + M.throttle.status.EXITED
       end,
     })

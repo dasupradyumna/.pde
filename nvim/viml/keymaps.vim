@@ -20,6 +20,10 @@ nnoremap K i<CR><Esc>
 nnoremap U <C-R>
 inoremap <Left> <C-G>U<Left>
 inoremap <Right> <C-G>U<Right>
+imap <C-H> <Left>
+imap <C-J> <Down>
+imap <C-K> <Up>
+imap <C-L> <Right>
 
 " system clipboard
 nnoremap <Leader>cc "+y

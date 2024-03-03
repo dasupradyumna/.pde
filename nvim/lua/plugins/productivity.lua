@@ -6,7 +6,7 @@ local function nmap(lhs, rhs) vim.keymap.set('n', lhs, rhs, {}) end
 return {
   {
     'ggandor/leap.nvim',
-    keys = { 'f', 'F', 't', 'T', 'S', '<C-N>', '<C-P>' },
+    keys = { 'c', 'd', 'v', 'y', 'f', 'F', 't', 'T', 'S', '<C-N>', '<C-P>' },
     config = function()
       local config = require('leap').opts
       config.special_keys.next_target = '<C-N>'

@@ -70,6 +70,12 @@ endfunction
 
 "--------------------------------- STATUSLINE ---------------------------------"
 
+function! s:statusline_git_head()
+    return g:user->has_key('git_head')
+                \ ? '%#Operator# 󰊢 ' .. g:user.git_head
+                \ : ''
+endfunction
+
 let s:todo = {
             \ 'render': { 'FIX': '󰠭 ', 'HACK': '󰈸 ', 'NOTE': '󰅺 ', 'PERF': '󰥔 ',
             \             'TEST': '󰖷 ', 'TODO': ' ', 'WARN': ' ' },
@@ -101,9 +107,12 @@ function! s:statusline_ruler()
     return ' %' .. width .. '(%l/%L%),%2(%v%) %P '
 endfunction
 
+" PERF: cache statusline components (global, tab, window scopes) for more responsive rendering
+"       git_head and todo_stats are a bit slow since they depend on shell processes
 function! ui#statusline()
-    return printf('%%#TabLineSel# %s  %%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
-                \ getcwd()->fnamemodify(':~'),
+    return printf('%%#TabLineSel#  %s  %s%%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
+                \ getcwd()->fnamemodify(':t'),
+                \ s:statusline_git_head(),
                 \ s:statusline_todo_stats(),
                 \ s:statusline_ruler())
 endfunction

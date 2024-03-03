@@ -43,6 +43,10 @@ augroup __user__
     " display folds in statuscolumn when supported
     autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
 
+    " TODO: also execute this when git branch changing command is run within neovim
+    " update the git head for the current working directory
+    autocmd VimEnter,DirChanged * call util#update_git_head()
+
 augroup END
 
 "----------------------------------- PLUGINS ----------------------------------"
