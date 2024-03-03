@@ -45,8 +45,6 @@ return {
           nnoremap('gD', vim.lsp.buf.declaration, { reuse_win = true })
           nnoremap('gh', vim.lsp.buf.hover)
           nnoremap('gH', vim.lsp.buf.signature_help)
-          nnoremap('gn', vim.diagnostic.goto_next)
-          nnoremap('gN', vim.diagnostic.goto_prev)
           nnoremap('gr', vim.lsp.buf.rename)
           nnoremap('gR', vim.lsp.buf.references)
           nnoremap('gs', vim.lsp.buf.document_symbol)

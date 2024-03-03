@@ -4,6 +4,7 @@
 vim.g.user = vim.empty_dict()
 
 local util = require 'user.util'
+require 'user.diagnostic'
 
 util.vim_source 'options'
 util.vim_source 'keymaps'

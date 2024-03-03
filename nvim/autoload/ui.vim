@@ -43,6 +43,22 @@ function! s:winbar_bufname()
     return bufname
 endfunction
 
+const s:diagnostic_render = [['Error', ''], ['Warn', ''], ['Info', ''], ['Hint', '']]
+function! s:winbar_diagnostics_map(index, value)
+    if a:value->empty() | return a:value | endif
+
+    let [hl, icon] = s:diagnostic_render[a:index]
+    return printf('%%#%s#%s %d', hl, icon, a:value)
+endfunction
+function! s:winbar_diagnostics()
+    let diagnostics = v:lua.vim.diagnostic.count(0)
+    if diagnostics->empty() | return '' | endif
+
+    return diagnostics->map(function('s:winbar_diagnostics_map'))
+                \ ->filter('!v:val->empty()')
+                \ ->insert('')->add('%#WinBarBG#')->join()
+endfunction
+
 const s:gitsigns_hl = { '+': 'GitNew', '~': 'GitDirty', '-': 'GitDeleted' }
 function! s:winbar_gitsigns()
     let status = b:->get('gitsigns_status', '')->split()
@@ -61,9 +77,10 @@ function! s:winbar_filetype()
 endfunction
 
 function! ui#winbar()
-    return printf(' %s %s   %%#WinBarBG#%%=%s%s',
+    return printf(' %s %s   %%#WinBarBG#%s%%=%s%s',
                 \ &l:modified ? '*' : ' ',
                 \ s:winbar_bufname(),
+                \ s:winbar_diagnostics(),
                 \ s:winbar_gitsigns(),
                 \ s:winbar_filetype())
 endfunction

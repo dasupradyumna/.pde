@@ -58,3 +58,9 @@ nnoremap <C-Up> <C-W>+
 nnoremap <C-Down> <C-W>-
 nnoremap <C-Left> <C-W><
 nnoremap <C-Right> <C-W>>
+
+"--------------------------------- DIAGNOSTICS --------------------------------"
+
+nnoremap gn <Cmd>lua vim.diagnostic.goto_next { float = false }<CR>
+nnoremap gN <Cmd>lua vim.diagnostic.goto_prev { float = false }<CR>
+nnoremap go <Cmd>lua vim.diagnostic.open_float()<CR>
