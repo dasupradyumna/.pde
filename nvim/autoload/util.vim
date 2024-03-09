@@ -34,3 +34,11 @@ function! util#update_git_head()
                 \ 'on_stdout': function('s:git_head_on_event') ,
                 \ 'on_exit': function('s:git_head_on_event') })
 endfunction
+
+" NOTE: limitation: can handle only upto 9 captures
+function! util#matchstr(target, pattern, match_all = v:false)
+    let matches = []
+    try | call substitute(a:target, a:pattern, {m-> extend(matches, m)}, a:match_all ? 'g' : '')
+    catch | return matches[1:]->filter({_,v-> !empty(v)})
+    endtry
+endfunction

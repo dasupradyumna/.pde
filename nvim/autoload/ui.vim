@@ -14,12 +14,12 @@ function! s:winbar_bufname_diffview(bufname)
     if a:bufname == 'diffview://null' | return 'NULL' | endif
 
     " handle side panel buffers
-    let name = a:bufname->matchstr('^diffview:///panels/\d/Diffview\zs.*\zePanel$')
-    if !name->empty() | return 'git-' .. s:diffview.panel[name] | endif
+    let name = util#matchstr(a:bufname, '\v^diffview:///panels/\d/Diffview(.*)Panel$')
+    if !name->empty() | return 'git-' .. s:diffview.panel[name[0]] | endif
 
     " handle revision buffers
     let pattern = printf('\v^diffview://%s/.git/([[:alnum:]:]+)/(.+)$', t:diffview_toplevel_dir)
-    let context = a:bufname->substitute(pattern, '\1 \2', '')->split()
+    let context = util#matchstr(a:bufname, pattern)
     let context[0] = s:diffview.buffer->get(context[0], 'COMMIT:' .. context[0])
     let context[1] = context[1]->fnamemodify(':gs;/;\\;')
     return context->join(': ')
@@ -55,7 +55,7 @@ function! s:winbar_diagnostics()
     if diagnostics->empty() | return '' | endif
 
     return diagnostics->map(function('s:winbar_diagnostics_map'))
-                \ ->filter('!v:val->empty()')
+                \ ->filter({_,v-> !v->empty()})
                 \ ->insert('')->add('%#WinBarBG#')->join()
 endfunction
 
@@ -64,7 +64,7 @@ function! s:winbar_gitsigns()
     let status = b:->get('gitsigns_status', '')->split()
     if status->empty() || util#is_diffview_tabpage() | return '' | endif
 
-    return status->map('printf("%%#%s#%s", s:gitsigns_hl[v:val[0]], v:val)')
+    return status->map({_,v-> printf("%%#%s#%s", s:gitsigns_hl[v[0]], v)})
                 \ ->add('%#WinBarBG#')
                 \ ->join()
 endfunction
