@@ -64,3 +64,9 @@ nnoremap <C-Right> <C-W>>
 nnoremap gn <Cmd>lua vim.diagnostic.goto_next { float = false }<CR>
 nnoremap gN <Cmd>lua vim.diagnostic.goto_prev { float = false }<CR>
 nnoremap go <Cmd>lua vim.diagnostic.open_float()<CR>
+
+"---------------------------------- RIP-GREP ----------------------------------"
+
+nnoremap <Leader>ss <Cmd>call grep#search()<CR>
+nnoremap <Leader>sf <Cmd>call grep#search_filetype()<CR>
+nnoremap <Leader>sd <Cmd>call grep#search_directory()<CR>
