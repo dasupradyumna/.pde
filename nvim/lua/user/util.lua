@@ -1,14 +1,7 @@
 ----------------------------------------- UTILITIES MODULE -----------------------------------------
+-- CHECK: are the scheduler and throttle wrapper needed?
 
 local M = {}
-
-M.path = {
-  config = vim.fn.stdpath 'config',
-  data = vim.fn.stdpath 'data',
-}
-
--- source vimscript file in config directory
-function M.vim_source(file) vim.cmd.source(('%s/viml/%s.vim'):format(M.path.config, file)) end
 
 ---executes callback after the specified timeout
 ---@param timeout integer

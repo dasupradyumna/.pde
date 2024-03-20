@@ -1,8 +1,5 @@
 "--------------------------------------- CUSTOM USER KEYMAPS --------------------------------------"
 
-let g:mapleader = ' '
-let g:maplocalleader = ' '
-
 "----------------------------------- GENERAL ----------------------------------"
 
 map <Space> <NOP>
@@ -47,7 +44,6 @@ nnoremap <Leader>, <Cmd>nohlsearch<CR>
 
 "----------------------------------- WINDOWS ----------------------------------"
 
-nnoremap <C-P> <C-W>p
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
@@ -66,6 +62,7 @@ nnoremap gN <Cmd>lua vim.diagnostic.goto_prev { float = false }<CR>
 nnoremap go <Cmd>lua vim.diagnostic.open_float()<CR>
 
 "---------------------------------- RIP-GREP ----------------------------------"
+" REMOVE: after ripgrep.nvim reaches feature parity with autoload/grep.vim
 
 nnoremap <Leader>ss <Cmd>call grep#search()<CR>
 nnoremap <Leader>sf <Cmd>call grep#search_filetype()<CR>

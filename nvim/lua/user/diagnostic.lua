@@ -7,8 +7,7 @@ local pretty_source = {
 
 vim.diagnostic.config {
   virtual_text = {
-    virt_text_pos = 'right_align',
-    spacing = 0,
+    virt_text_pos = 'eol',
     prefix = '',
   },
   signs = false,

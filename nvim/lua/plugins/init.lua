@@ -11,6 +11,7 @@ return {
       require('midnight').setup {
         WinBarBG = { fg = p.black, bg = c.bg },
         Folded = { bg = p.gray[8] },
+        SpellCap = {},
         -- FIX: move to the colorscheme
         LazyReasonRequire = { link = 'Parameter' },
         MsgSeparator = { link = 'Border' },

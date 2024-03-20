@@ -23,9 +23,10 @@ return {
   },
   {
     'kylechui/nvim-surround',
-    keys = { 's', 'S', 'cs', 'cS', 'ds', 'ys', 'yss', 'yS', 'ySS', '<C-S>', '<C-g>S' },
+    -- FIX: lazy-loading in modes other than normal does not work
+    keys = { 's', 'cs', 'cS', 'ds', 'ys', 'yss', 'yS', 'ySS', '<C-S>', '<C-g>S' },
     opts = {
-      keymaps = { insert = '<C-S>', visual = 's', visual_line = 'S' },
+      keymaps = { insert = '<C-S>', visual = 's' },
       -- TODO: change neovim builtin text objects to match this
       aliases = { r = ')', R = '(', b = { '}', ']' }, B = { '{', '[' }, s = '' },
       move_cursor = false,
@@ -40,7 +41,7 @@ return {
       todo.setup {
         signs = false,
         keywords = {
-          FIX = { icon = '󰠭 ' },
+          FIX = { icon = '󰠭 ', alt = { 'REMOVE' } },
           HACK = { icon = '󰈸 ' },
           NOTE = { icon = '󰅺 ' },
           PERF = { icon = '󰥔 ' },

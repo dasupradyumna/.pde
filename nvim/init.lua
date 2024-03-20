@@ -3,15 +3,15 @@
 -- global user data
 vim.g.user = vim.empty_dict()
 
-local util = require 'user.util'
+-- setting keymap leader before lazy.nvim setup
+vim.g.mapleader = ' '
+vim.g.localmapleader = ' '
+
 require 'user.diagnostic'
 
-util.vim_source 'options'
-util.vim_source 'keymaps'
-util.vim_source 'autocommands'
-
 -- bootstrap lazy.nvim plugin manager
-local lazy_path = util.path.data .. '/lazy/lazy.nvim'
+local data_path = vim.fn.stdpath 'data'
+local lazy_path = data_path .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazy_path) then
   vim.fn.system {
     'git',
@@ -24,7 +24,7 @@ if not vim.uv.fs_stat(lazy_path) then
 end
 vim.opt.runtimepath:prepend(lazy_path)
 require('lazy').setup('plugins', {
-  lockfile = util.path.data .. '/lazy-lock.json',
+  lockfile = data_path .. '/lazy-lock.json',
   -- CHECK: does this work & detect local plugin repos?
   dev = { path = '~/neovim_plugins', patterns = { 'dasupradyumna' }, fallback = true },
   install = { colorscheme = { 'retrobox' } },
