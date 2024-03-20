@@ -18,6 +18,7 @@ function! util#try_require(path)
     endtry
 endfunction
 
+" FIX: non-repo folders get empty string instead of null
 function! s:git_head_on_event(_, data, event) dict
     if a:event == 'stdout'
         let self.output ..= a:data->join()->trim()

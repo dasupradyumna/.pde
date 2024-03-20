@@ -26,6 +26,7 @@ function! s:winbar_bufname_diffview(bufname)
 endfunction
 
 function! s:winbar_bufname()
+    " FIX: :lcd causes the names to change constantly in other windows (same tabpage)
     let bufname = expand('%:.')
 
     " handle help buffers
@@ -121,7 +122,7 @@ endfunction
 
 function! s:statusline_ruler()
     let width = 2 * nvim_buf_line_count(0)->len() + 1
-    return ' %' .. width .. '(%l/%L%),%2(%v%) %P '
+    return ' %' .. width .. '(%l/%L%),%2(%v%) '
 endfunction
 
 " PERF: cache statusline components (global, tab, window scopes) for more responsive rendering

@@ -33,7 +33,7 @@ set matchpairs+=<:>
 set mouse=
 set report=0
 set scrolloff=4
-set sessionoptions=buffers,curdir,folds,help,options,tabpages,winsize
+set sessionoptions=buffers,folds,globals,help,tabpages,winsize
 set shortmess=aoOsIcCF
 set sidescrolloff=4
 set smartcase
