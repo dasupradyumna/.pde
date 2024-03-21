@@ -21,4 +21,9 @@ return {
       vim.cmd.colorscheme 'midnight'
     end,
   },
+  {
+    'dasupradyumna/launch.nvim',
+    opts = { debug = { disable = true } },
+  },
+  { 'dasupradyumna/tabs.nvim', opts = {} },
 }

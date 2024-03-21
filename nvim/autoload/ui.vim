@@ -132,9 +132,10 @@ function! ui#statusline()
                 \ ? printf('%%#TabLineSel#  %s  %%*%%=%%#WinBarBG#%%#CursorLine#%s',
                 \           getcwd()->fnamemodify(':t'),
                 \           s:statusline_ruler())
-                \ : printf('%%#TabLineSel#  %s  %s%%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
+                \ : printf('%%#TabLineSel#  %s  %s%%*%%=%s%%=%s%%#WinBarBG#%%#CursorLine#%s',
                 \           getcwd()->fnamemodify(':t'),
                 \           s:statusline_git_head(),
+                \           v:lua.require('tabs').status(),
                 \           s:statusline_todo_stats(),
                 \           s:statusline_ruler())
 endfunction

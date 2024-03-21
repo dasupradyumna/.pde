@@ -60,6 +60,7 @@ set laststatus=3
 set list listchars=tab:──,trail:·
 set noruler nowrap
 set number numberwidth=2
+set showtabline=0
 set signcolumn=auto:1
 let &statuscolumn = '%s%=%l '
 set statusline=%{%ui#statusline()%}

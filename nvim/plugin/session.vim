@@ -15,6 +15,9 @@ function! s:session.save()
     if self.disabled | return | endif
     if s:is_current_session_empty()  | call self.delete() | return | endif
 
+    " tabs.nvim: save tabpage names
+    lua require('tabs').save_to_global()
+
     call mkdir(s:session_folder, 'p')
     execute 'mksession!' self.filepath
 endfunction
