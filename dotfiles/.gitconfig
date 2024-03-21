@@ -5,7 +5,7 @@
 [init]
 	defaultBranch = main
 [core]
-	editor = nvim
+	editor = nvim --cmd \"lua vim.g.user = { neovim_git_mode = true }\"
 [commit]
 	gpgSign = true
 [gpg]
@@ -13,4 +13,6 @@
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/git_allowed_signers
 [help]
-	autocorrect = 10
+	autocorrect = prompt
+[alias]
+	root-dir = rev-parse --show-toplevel

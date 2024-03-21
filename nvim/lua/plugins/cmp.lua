@@ -59,15 +59,16 @@ return {
   },
   {
     'hrsh7th/nvim-cmp',
+    cond = true,
     event = 'VeryLazy',
     dependencies = {
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
-      'saadparwaiz1/cmp_luasnip',
-      'L3MON4D3/LuaSnip',
+      { 'hrsh7th/cmp-buffer', cond = true },
+      { 'hrsh7th/cmp-path', cond = true },
+      { 'hrsh7th/cmp-cmdline', cond = true },
+      { 'hrsh7th/cmp-nvim-lsp', cond = true },
+      { 'hrsh7th/cmp-nvim-lsp-signature-help', cond = true },
+      { 'saadparwaiz1/cmp_luasnip', cond = true },
+      { 'L3MON4D3/LuaSnip', cond = true },
     },
     config = function()
       local cmp = require 'cmp'

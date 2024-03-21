@@ -6,6 +6,7 @@ local function nmap(lhs, rhs) vim.keymap.set('n', lhs, rhs, {}) end
 return {
   {
     'ggandor/leap.nvim',
+    cond = true,
     keys = { 'c', 'd', 'v', 'y', 'f', 'F', 't', 'T', 'S', '<C-N>', '<C-P>' },
     config = function()
       local config = require('leap').opts
@@ -23,6 +24,7 @@ return {
   },
   {
     'kylechui/nvim-surround',
+    cond = true,
     -- FIX: lazy-loading in modes other than normal does not work
     keys = { 's', 'cs', 'cS', 'ds', 'ys', 'yss', 'yS', 'ySS', '<C-S>', '<C-g>S' },
     opts = {

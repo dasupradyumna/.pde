@@ -1,7 +1,7 @@
 -------------------------------------------- ENTRY POINT -------------------------------------------
 
 -- global user data
-vim.g.user = vim.empty_dict()
+vim.g.user = vim.g.user or vim.empty_dict()
 
 -- setting keymap leader before lazy.nvim setup
 vim.g.mapleader = ' '
@@ -24,8 +24,8 @@ if not vim.uv.fs_stat(lazy_path) then
 end
 vim.opt.runtimepath:prepend(lazy_path)
 require('lazy').setup('plugins', {
+  defaults = { cond = not vim.g.user.neovim_git_mode },
   lockfile = data_path .. '/lazy-lock.json',
-  -- CHECK: does this work & detect local plugin repos?
   dev = { path = '~/neovim_plugins', patterns = { 'dasupradyumna' }, fallback = true },
   install = { colorscheme = { 'retrobox' } },
   ui = { size = { width = 0.999, height = 0.95 }, border = 'rounded' },

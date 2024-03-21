@@ -30,36 +30,41 @@ augroup __user__
     " trim all trailing whitespace before writing buffer
     autocmd BufWritePre * call s:trim_trailing_whitespace()
 
-    " format buffers using the configured formatters
-    autocmd BufWritePost * call format#buffer()
-
     " enable cursorline only in focused window
     autocmd VimEnter,WinEnter * setlocal cursorline
     autocmd WinLeave * setlocal nocursorline
 
-    " disable colorcolumn in buffers not associated with files
-    autocmd BufWinEnter * if &buftype != '' | setlocal colorcolumn= | endif
+    if !exists('g:user.neovim_git_mode')
 
-    " display folds in statuscolumn when supported
-    autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
+        " disable colorcolumn in buffers not associated with files
+        autocmd BufWinEnter * if &buftype != '' | setlocal colorcolumn= | endif
 
-    " TODO: also execute this when git branch changing command is run within neovim
-    " update the git head for the current working directory
-    autocmd VimEnter,DirChanged * call util#update_git_head()
+        " format buffers using the configured formatters
+        autocmd BufWritePost * call format#buffer()
 
+        " display folds in statuscolumn when supported
+        autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
+
+        " TODO: also execute this when git branch changing command is run within neovim
+        " update the git head for the current working directory
+        autocmd VimEnter,DirChanged * call util#update_git_head()
+
+    endif
 augroup END
 
 "----------------------------------- PLUGINS ----------------------------------"
 
-function! s:diffview_customize_commit_log_panel()
+function! s:diffview_customize_commit_log()
     setlocal statuscolumn<
     nnoremap <buffer> q <Cmd>quit<CR>
 endfunction
 
-augroup __plugins__
-    autocmd!
+if !exists('g:user.neovim_git_mode')
+    augroup __plugin__
+        autocmd!
 
-    " customize diffview.nvim commit log panel behavior
-    autocmd BufEnter diffview://*/.git/log/*/commit_log call s:diffview_customize_commit_log_panel()
+        " customize diffview.nvim commit log panel behavior
+        autocmd BufEnter diffview://*/.git/log/*/commit_log call s:diffview_customize_commit_log()
 
-augroup END
+    augroup END
+endif

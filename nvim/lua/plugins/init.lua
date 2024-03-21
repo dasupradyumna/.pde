@@ -3,8 +3,8 @@
 return {
   {
     'dasupradyumna/midnight.nvim',
+    cond = true,
     priority = 1000,
-    lazy = false,
     config = function()
       local p = require('midnight.colors').palette
       local c = require('midnight.colors').components

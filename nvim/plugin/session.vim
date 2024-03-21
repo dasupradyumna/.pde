@@ -50,7 +50,11 @@ augroup __session__
     autocmd!
 
     " restore existing session if any, when entering Neovim or the current directory
-    autocmd VimEnter,DirChanged * ++nested SessionLoad
+    autocmd VimEnter,DirChanged * ++nested
+                \ if exists('g:user.neovim_git_mode') |
+                \     let s:session.disabled = v:true |
+                \ endif |
+                \ SessionLoad
 
     " save current session, when leaving Neovim or the current directory
     autocmd VimLeavePre,DirChangedPre * SessionSave

@@ -128,11 +128,15 @@ endfunction
 " PERF: cache statusline components (global, tab, window scopes) for more responsive rendering
 "       git_head and todo_stats are a bit slow since they depend on shell processes
 function! ui#statusline()
-    return printf('%%#TabLineSel#  %s  %s%%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
-                \ getcwd()->fnamemodify(':t'),
-                \ s:statusline_git_head(),
-                \ s:statusline_todo_stats(),
-                \ s:statusline_ruler())
+    return exists('g:user.neovim_git_mode')
+                \ ? printf('%%#TabLineSel#  %s  %%*%%=%%#WinBarBG#%%#CursorLine#%s',
+                \           getcwd()->fnamemodify(':t'),
+                \           s:statusline_ruler())
+                \ : printf('%%#TabLineSel#  %s  %s%%*%%=%s%%#WinBarBG#%%#CursorLine#%s',
+                \           getcwd()->fnamemodify(':t'),
+                \           s:statusline_git_head(),
+                \           s:statusline_todo_stats(),
+                \           s:statusline_ruler())
 endfunction
 
 "-------------------------------- STATUSCOLUMN --------------------------------"
