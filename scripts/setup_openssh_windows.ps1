@@ -8,18 +8,18 @@ Write-Host -ForegroundColor DarkGreen `
 Function Write-Info {
     Param (
         [String]$Message,  # Information to write to host display
-        [Switch]$N         # Add new-line at the end if included
+        [Switch]$N         # Add new-line at the end when enabled
     )
 
-    If ($N) { Write-Host -ForegroundColor DarkCyan "$Message" }
-    Else { Write-Host -NoNewline -ForegroundColor DarkCyan "$Message" }
+    If ($N) { Write-Host -ForegroundColor DarkCyan $Message }
+    Else { Write-Host -NoNewline -ForegroundColor DarkCyan $Message }
 }
 
 #################### ENABLE BUILTIN SSH ####################
 
-Write-Info " * Enabling Windows builtin OpenSSH Client + Server ... "
+Write-Info ' * Enabling Windows builtin OpenSSH Client + Server ... '
 
-Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*' |
+Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH*' |
     Add-WindowsCapability -Online | Out-Null
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 Start-Service ssh-agent
@@ -34,7 +34,7 @@ $URL = 'https://github.com/PowerShell/Win32-OpenSSH/releases/latest'
 
 ################# DOWNLOAD-EXTRACT RELEASE #################
 
-Write-Info " * Downloading and extracting the latest release on GitHub ... "
+Write-Info ' * Downloading and extracting the latest release on GitHub ... '
 
 # Download the latest release archive from GitHub
 $ReleaseNameZip = "$ReleaseName.zip"
@@ -49,7 +49,7 @@ Write-Info -N 'Done'
 
 ################## UPDATE SYSTEM BINARIES ##################
 
-Write-Info " * Updating system SSH binaries using the extracted release ... "
+Write-Info ' * Updating system SSH binaries using the extracted release ... '
 
 # Access rule that grants ownership to system administrators
 $AdminFullControlAccessRule = New-Object `
@@ -84,7 +84,7 @@ Write-Info -N 'Done'
 
 #################### POST-SETUP CLEANUP ####################
 
-Write-Info " * Cleaning up the script directory after setup ... "
+Write-Info ' * Cleaning up the script directory after setup ... '
 
 # Restart previously stopped service
 Start-Service ssh-agent
