@@ -38,20 +38,21 @@ return {
     'folke/todo-comments.nvim',
     event = 'VeryLazy',
     dependencies = 'nvim-lua/plenary.nvim',
-    config = function()
+    opts = {
+      signs = false,
+      keywords = {
+        FIX = { icon = '󰠭 ', alt = { 'BUG', 'ISSUE', 'REMOVE' } },
+        HACK = { icon = '󰈸 ', alt = { 'XXX' } },
+        NOTE = { icon = '󰅺 ', alt = { 'INFO' } },
+        PERF = { icon = '󰥔 ', alt = { 'OPTIM' } },
+        TEST = { icon = '󰖷 ', alt = { 'CHECK' } },
+        TODO = { icon = ' ', alt = { 'EXPLORE' } },
+        WARN = { icon = ' ', alt = {} },
+      },
+    },
+    config = function(_, opts)
       local todo = require 'todo-comments'
-      todo.setup {
-        signs = false,
-        keywords = {
-          FIX = { icon = '󰠭 ', alt = { 'REMOVE' } },
-          HACK = { icon = '󰈸 ' },
-          NOTE = { icon = '󰅺 ' },
-          PERF = { icon = '󰥔 ' },
-          TEST = { icon = '󰖷 ', alt = { 'CHECK' } },
-          TODO = { icon = ' ', alt = { 'EXPLORE' } },
-          WARN = { icon = ' ' },
-        },
-      }
+      todo.setup(opts)
 
       -- navigate todo items in a buffer
       nmap('[t', todo.jump_prev)

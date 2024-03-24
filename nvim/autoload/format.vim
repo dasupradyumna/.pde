@@ -7,7 +7,7 @@ function! s:config_resolver(filename)
 endfunction
 
 const s:lua = { 'exe': stdpath('data') .. '/mason/bin/stylua', 'config': 'stylua.toml',
-            \ 'command': {-> [ s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.') ]} }
+            \ 'command': {-> [s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.')]} }
 
 "----------------------------- FORMATTER FUNCTION -----------------------------"
 
@@ -22,5 +22,10 @@ function! format#buffer()
     " FIX: system() is a blocking function call?
     let output = system(formatter.command())
     if v:shell_error | call v:lua.vim.notify("Formatting failed\n\n" .. output, 3) | return | endif
-    checktime %
+    " checktime %
+    " BUG: to refresh treesitter folds after formatting
+    "      also save/restore fold state
+    let view = winsaveview()
+    edit %
+    call winrestview(view)
 endfunction
