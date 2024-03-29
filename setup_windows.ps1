@@ -1,13 +1,14 @@
 ################################# WINDOWS SETUP ################################
 # Install all necessary programs and tools required for the PDE and copy the
 # configs to the appropriate system directories
-# FIX: errors in any command should auto-exit the entire script
 Param (
     [Switch]$Update # Update the tools but do not copy configs when enabled
 )
 $ProgramDir = "$PWD\programs"
 
-Function Write-Info {
+# Writes information to stdout in cyan color
+Function Write-Info
+{
     Param (
         [String]$Message,   # Information to write to host display
         [Switch]$N          # Add new-line at the end when enabled
@@ -18,8 +19,8 @@ Function Write-Info {
 }
 
 # Downloads and installs the nightly version of a software for a user
-# TODO: add a manifest with all SHA hashes to update only if needed
-function Install-Nightly {
+function Install-Nightly
+{
     Param (
         [String]$MiniURL,   # Nightly release mini URL
         [String]$File,      # Release file name
@@ -36,8 +37,9 @@ function Install-Nightly {
     Write-Info " * Verifying SHA hash from '$FileURL.$SHA256' ... "
     $FileSHA = "$(Invoke-WebRequest "$FileURL.$SHA256")".Split()[0]
     If ($FileSHA -ne (Get-FileHash "$File.zip").Hash.ToLower()) {
-        Write-Host -ForegroundColor Red "ERROR: '$MiniURL' release file SHA" +`
-            ' hash did not match. Aborting installation!'
+        Write-Host -ForegroundColor Red "`n  ERROR: '$MiniURL' release file" + `
+            ' SHA hash did not match. Aborting installation!'
+        Return
     }
     Write-Info -N 'Done'
 
@@ -54,7 +56,9 @@ function Install-Nightly {
     Write-Info -N 'Done.'
 }
 
-function Add-To-User-Path {
+# Add given path to User PATH environment variable if not present
+function Add-To-User-Path
+{
     Param ( [String]$TargetPath )
 
     $PATH = [Environment]::GetEnvironmentVariable('PATH', 'User').Split( `
@@ -66,14 +70,17 @@ function Add-To-User-Path {
     }
 }
 
-function Install-Config {
+# Install the configuration to the destination folder
+function Install-Config
+{
     Param ( [String]$Source, [String]$Destination )
 
     If ($Update) { Return }
     New-Item -Force -ItemType SymbolicLink -Path $Destination -Target $Source
 }
 
-function Run-Main {
+function Run-Main
+{
     Write-Host -ForegroundColor DarkGreen `
         "Executing script for PDE setup on Windows`n"
 
@@ -93,9 +100,9 @@ function Run-Main {
     Install-Config "$PWD\dotfiles\.gitconfig" "$env:USERPROFILE\.gitconfig"
 
     # Install RipGrep
-    Write-Info "Checking for RipGrep updates -`n"
+    Write-Info -N "Checking for RipGrep updates -"
     winget install BurntSushi.ripgrep.MSVC
-    Write-Info "Done.`n`n"
+    Write-Info -N "Done.`n"
 
     # Uninstall and reinstall git to use external OpenSSH
     #
@@ -106,10 +113,10 @@ function Run-Main {
     # Refer to https://github.com/git-for-windows/git/issues/3647
     # and https://github.com/microsoft/winget-cli/discussions/3462
     # TODO: check git version, do not update if already latest version
-    Write-Info "Rebuilding GIT with support for external OpenSSH -`n"
+    Write-Info -N "Rebuilding GIT with support for external OpenSSH -"
     winget uninstall Git.Git
     winget install --id=Git.Git --custom '/o:SSHOption=ExternalOpenSSH'
-    Write-Info "Done.`n`n"
+    Write-Info -N "Done.`n"
 
     Write-Host -ForegroundColor DarkGreen "Completed PDE setup"
 }

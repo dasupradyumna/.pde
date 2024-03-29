@@ -82,3 +82,6 @@ autoload
 enum
 quickfix
 stdout
+dir
+cmd
+appimage
