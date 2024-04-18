@@ -1,9 +1,9 @@
 ------------------------------------- LANGUAGE SERVER PROTOCOL -------------------------------------
 
+local mason_tools = { 'lua-language-server', 'stylua' }
 local installed_lsps = { lua = 'lua_ls' }
 
 return {
-  -- TODO: automatically install missing tools
   {
     'williamboman/mason.nvim',
     lazy = true,
@@ -17,6 +17,39 @@ return {
         keymaps = { uninstall_package = 'x' },
       },
     },
+    config = function(_, opts)
+      require('mason').setup(opts)
+
+      ---installs the specified package and sets up a callback for failure
+      local function install_and_check(pkg, ver)
+        pkg:install(ver)
+        pkg:on(
+          'install:failed',
+          vim.schedule_wrap(
+            function(handle)
+              vim.api.nvim_echo({
+                { table.concat(handle.stdio.buffers.stdout), 'Warn' },
+                { table.concat(handle.stdio.buffers.stderr), 'Error' },
+                { '\n' },
+              }, true, {})
+            end
+          )
+        )
+      end
+
+      local registry = require 'mason-registry'
+      for _, tool in ipairs(mason_tools) do
+        local pkg = registry.get_package(tool)
+        if not pkg:is_installed() then
+          vim.schedule(function() install_and_check(pkg) end)
+        else
+          pkg:check_new_version(function(yes, result)
+            if not yes or type(result) == 'string' then return end
+            install_and_check(pkg, { version = result.latest_version })
+          end)
+        end
+      end
+    end,
   },
   {
     'neovim/nvim-lspconfig',
