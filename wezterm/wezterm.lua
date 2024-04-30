@@ -8,7 +8,7 @@ end
 local config = {}
 
 -- core
-config.default_prog = { win_linux([[C:\Program Files\PowerShell\7\pwsh.exe]], '/usr/bin/zsh') }
+config.default_prog = { win_linux([[C:\Program Files\PowerShell\7\pwsh.exe]], '/usr/bin/bash') }
 config.exit_behavior = 'CloseOnCleanExit'
 config.exit_behavior_messaging = 'Terse'
 config.automatically_reload_config = false
@@ -36,6 +36,5 @@ config.window_decorations = 'RESIZE'
 
 -- keybindings
 -- config.disable_default_mouse_bindings = true
-
 
 return config

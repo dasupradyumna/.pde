@@ -93,6 +93,7 @@ run-main()
 
     # Install all dotfiles
     install-config "$PWD/dotfiles/.gitconfig" ~
+    install-config "$PWD/dotfiles/.bash_aliases" ~
     write-info "\n"
 
     # Install RipGrep
