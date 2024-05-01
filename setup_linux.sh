@@ -23,9 +23,9 @@ prepare-program-dir()
     # do not add $program_dir to PATH if it is already present
     for p in ${PATH//:/ }; do [ "$p" == "$program_dir" ] && return; done
 
-    write-info "Added '$program_dir' to \$PATH. Re-login for changes to take effect.\n\n"
+    write-info "Added '$program_dir' to \$PATH. Re-login for changes to take effect globally.\n\n"
     export_cmd="export PATH=$program_dir:\$PATH"
-    # eval "$export_cmd" # FIX: will only work if sourced in a bash (not zsh) environment
+    eval "$export_cmd"
     (echo "$export_cmd" | tee -a ~/.profile) &>/dev/null
 }
 
@@ -51,10 +51,9 @@ get-appimage-nightly()
     }
     write-info "Done\n"
 
-    write-info " * Creating symlink '$bin' for '$file' and making it executable ... "
-    ln -sf "$PWD/$file" "./$bin"
+    mv "$PWD/$file" "./$bin"
     chmod u+x "./$bin"
-    write-info "Done\n"
+    write-info " * Renamed '$file' to '$bin' and made it executable.\n"
 
     write-info "Done.\n"
     cd ..
@@ -71,8 +70,23 @@ install-config()
     [ $update == true ] && return
 
     source="$1"; destination="$2"
-    write-info "Installing config from '$source' to '$destination'\n"
+    write-info "Installed config from '$source' to '$destination'\n"
     ln -sf "$source" "$destination"
+}
+
+apt-local-install()
+{
+    package="$1"; binary="$2"
+
+    write-info "Installing $package ... "
+    cd "$program_dir"
+    apt download "$package" &>/dev/null
+    deb="$(find -type f -name "$package*.deb")"
+    dpkg -x "$deb" "$package"
+    mv "$package/usr/bin/$binary" .
+    rm -rf "$package" "$deb"
+    cd ..
+    write-info "Done.\n"
 }
 
 run-main()
@@ -91,15 +105,14 @@ run-main()
     install-config "$PWD/nvim" ~/.config
     write-info "\n"
 
+    # Install RipGrep locally
+    apt-local-install ripgrep rg
+    write-info "\n"
+
     # Install all dotfiles
     install-config "$PWD/dotfiles/.gitconfig" ~
     install-config "$PWD/dotfiles/.bash_aliases" ~
-    write-info "\n"
-
-    # Install RipGrep
-    write-info "Checking for RipGrep updates -\n"
-    sudo apt install -y ripgrep
-    write-info "Done.\n\n"
+    [ $update != false ] || write-info "\n"
 
     echo -en "${c_green}Completed PDE Setup\n$c_none"
 }
