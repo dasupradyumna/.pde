@@ -15,7 +15,8 @@ return {
         -- FIX: move to the colorscheme
         LazyReasonRequire = { link = 'Parameter' },
         MsgSeparator = { link = 'Border' },
-        DiffviewDiffDeleteDim = { fg = p.gray[7] },
+        DiffviewDiffDelete = { fg = p.gray[7] },
+        DiffviewDiffDeleteDim = { link = 'DiffviewDiffDelete' },
       }
 
       vim.cmd.colorscheme 'midnight'
@@ -26,4 +27,5 @@ return {
     opts = { debug = { disable = true } },
   },
   { 'dasupradyumna/tabs.nvim', opts = {} },
+  { 'dasupradyumna/ripgrep.nvim', cmd = { 'RGSearch', 'RGSearchDirectory' }, opts = {} },
 }

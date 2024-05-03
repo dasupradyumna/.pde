@@ -38,6 +38,11 @@ function! s:winbar_bufname()
     " handle git commit message editor
     if bufname->match('\v^\.git[\\/]COMMIT_EDITMSG$') == 0 | return 'git-commit message' | endif
 
+    " handle git rebase interactive editor
+    if bufname->match('\v^\.git[\\/]rebase-merge[\\/]git-rebase-todo') == 0
+        return 'git-rebase interactive'
+    endif
+
     " handle diffview.nvim buffers
     if util#is_diffview_tabpage() | return s:winbar_bufname_diffview(bufname) | endif
 

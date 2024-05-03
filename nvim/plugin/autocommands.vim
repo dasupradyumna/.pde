@@ -24,6 +24,12 @@ function! s:set_statuscolumn_foldexpr()
     let &l:statuscolumn ..= '%#LineNr#%{ui#statuscolumn_fold()} '
 endfunction
 
+function! s:switch_cursorline(enable)
+    if &l:filetype->match('^ripgrep_nvim') >= 0 | return | endif
+
+    if a:enable | setlocal cursorline | else | setlocal nocursorline | endif
+endfunction
+
 augroup __user__
     autocmd!
 
@@ -31,8 +37,8 @@ augroup __user__
     autocmd BufWritePre * call s:trim_trailing_whitespace()
 
     " enable cursorline only in focused window
-    autocmd VimEnter,WinEnter * setlocal cursorline
-    autocmd WinLeave * setlocal nocursorline
+    autocmd VimEnter,WinEnter * call s:switch_cursorline(v:true)
+    autocmd WinLeave * call s:switch_cursorline(v:false)
 
     if !exists('g:user.neovim_git_mode')
 

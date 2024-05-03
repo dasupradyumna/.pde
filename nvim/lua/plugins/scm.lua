@@ -43,7 +43,7 @@ return {
       local lib = require 'diffview.lib'
       require('diffview').setup {
         enhanced_diff_hl = true,
-        view = { merge_tool = { layout = 'diff4_mixed' } },
+        view = { merge_tool = { layout = 'diff4_mixed', winbar_info = false } },
         file_history_panel = { win_config = { position = 'top' } },
         commit_log_panel = { win_config = { border = 'rounded' } },
         hooks = {
@@ -65,8 +65,8 @@ return {
             ['<Leader>gmn'] = act.next_conflict,
             ['<Leader>gmN'] = act.prev_conflict,
             ['<Leader>gmb'] = act.conflict_choose 'base',
-            ['<Leader>gmo'] = act.conflict_choose 'ours',
-            ['<Leader>gmt'] = act.conflict_choose 'theirs',
+            ['<Leader>gmc'] = act.conflict_choose 'ours', -- current
+            ['<Leader>gmi'] = act.conflict_choose 'theirs', -- incoming
           },
           -- TODO: lot of common panel keymaps; check if plugin offers a 'panel' attribute
           file_panel = {

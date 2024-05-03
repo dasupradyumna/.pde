@@ -5,7 +5,7 @@ vim.g.user = vim.g.user or vim.empty_dict()
 
 -- setting keymap leader before lazy.nvim setup
 vim.g.mapleader = ' '
-vim.g.localmapleader = ' '
+vim.g.maplocalleader = ':'
 
 require 'user.diagnostic'
 
