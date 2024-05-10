@@ -54,7 +54,7 @@ function! s:winbar_diagnostics_map(index, value)
     if a:value->empty() | return a:value | endif
 
     let [hl, icon] = s:diagnostic_render[a:index]
-    return printf('%%#%s#%s %d', hl, icon, a:value)
+    return printf('%%#Diagnostic%s#%s %d', hl, icon, a:value)
 endfunction
 function! s:winbar_diagnostics()
     let diagnostics = v:lua.vim.diagnostic.count(0)

@@ -3,7 +3,7 @@
 "-------------------------------- USER-DEFINED --------------------------------"
 
 " TODO: exclude all filetypes that have a formatter / LSP
-const s:trim_exclude = [ 'gitcommit', 'lua', 'markdown' ]
+const s:trim_exclude = ['gitcommit', 'lua', 'markdown', 'python']
 function! s:trim_trailing_whitespace()
     if s:trim_exclude->index(&l:filetype) >= 0 | return | endif
 
@@ -46,7 +46,7 @@ augroup __user__
         autocmd BufWinEnter * if &buftype != '' | setlocal colorcolumn= | endif
 
         " format buffers using the configured formatters
-        autocmd BufWritePost * call format#buffer()
+        autocmd BufWritePost * call format#buffer() | call format#enable()
 
         " display folds in statuscolumn when supported
         autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
