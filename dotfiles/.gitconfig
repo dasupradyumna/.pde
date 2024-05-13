@@ -1,6 +1,5 @@
 [user]
 	name = Dasu Pradyumna
-	email = dasupradyumna@gmail.com
 	signingKey = ~/.ssh/git_sign.pub
 [init]
 	defaultBranch = main

@@ -1,62 +1,80 @@
-################################# WINDOWS SETUP ################################
-# Install all necessary programs and tools required for the PDE and copy the
-# configs to the appropriate system directories
+############################################ LINUX SETUP ###########################################
+# Setup all programs required for the PDE in Linux and install their configs appropriately
 
-# flag to update or full install
-[ $# -eq 1 ] && update=true || update=false
-# programs directory
-program_dir="$PWD/programs"
-# color escape sequences
-c_red='\033[0;31m'
-c_green='\033[0;32m'
-c_cyan='\033[0;36m'
-c_none='\033[m'
+##################### GLOBAL VARIABLES #####################
 
-# writes information to stdout in cyan color
-write-info() { echo -en "$c_cyan$1$c_none"; }
+# command-line options
+update=false
+no_wezterm=false
 
-# creates programs directory and adds it to $PATH (if needed)
-prepare-program-dir()
-{
-    mkdir -p "$program_dir"
+# relevant directories
+program_dir="$HOME/.local/bin"
+app_dir="$program_dir/app"
 
-    # do not add $program_dir to PATH if it is already present
-    for p in ${PATH//:/ }; do [ "$p" == "$program_dir" ] && return; done
+# color terminal escape sequences
+c_RED='\033[0;31m'
+c_GREEN='\033[0;32m'
+c_CYAN='\033[0;36m'
+c_NONE='\033[m'
 
-    write-info "Added '$program_dir' to \$PATH. Re-login for changes to take effect globally.\n\n"
-    export_cmd="export PATH=$program_dir:\$PATH"
-    eval "$export_cmd"
-    (echo "$export_cmd" | tee -a ~/.profile) &>/dev/null
+##################### UTILITY FUNCTIONS ####################
+
+# show help message and exit the script
+show-help() {
+    echo '
+Usage: bash setup_linux.sh [-h] [-u] [--no-wezterm]
+    -h : show this help message
+    -u : update the programs without re-installing the config files (default: OFF)
+    --no-wezterm : skip setting up wezterm (default: OFF)'
+    exit $1 # exit with specified code
 }
 
-# downloads the nightly appimage from the given URL to the programs directory
+# write information
+write-info() { echo -en "$c_CYAN$1$c_NONE"; }
+
+# write an error message
+write-error() { echo -e "\n$c_RED! ERROR: $1$c_NONE"; }
+
+###################### CORE FUNCTIONS ######################
+
+# downloads and extracts the nightly appimage from the given URL to the programs directory
 get-appimage-nightly()
 {
-    mini_url="$1"; file="$2"; sha256="$3"; bin="$4"
+    # parameters
+    local mini_url="$1"     # mini GitHub URL
+    local file="$2"         # AppImage file name
+    local sha256="$3"       # AppImage SHA256 file name
+    local bin="$4"          # name of symlink binary
 
     write-info "Installing $mini_url -\n"
-    file_url="https://github.com/$mini_url/releases/download/nightly/$file"
+    local file_url="https://github.com/$mini_url/releases/download/nightly/$file"
     cd "$program_dir"
 
+    # download appimage file
     write-info " * Downloading appimage from '$file_url' ... "
     curl -L -o "$file" "$file_url" &>/dev/null
     write-info "Done\n"
 
+    # verify the downloaded appimage integrity
     write-info " * Verifying SHA hash from '$file_url.$sha256' ... "
-    file_sha="$(curl -L "$file_url.$sha256" 2>/dev/null)"
+    local file_sha="$(curl -L "$file_url.$sha256" 2>/dev/null)"
     [ "$file_sha" != "$(sha256sum "$file")" ] && {
-        echo -e "\n${c_red}   ERROR: '$mini_url' appimage SHA hash did not match. " \
-            "Aborting installation!$c_none"
+        write-error "'$mini_url' appimage SHA has did not match. Aborting installation!"
         return 1
     }
     write-info "Done\n"
 
-    mv "$PWD/$file" "./$bin"
-    chmod u+x "./$bin"
-    write-info " * Renamed '$file' to '$bin' and made it executable.\n"
+    # extract and install the appimage binaries
+    write-info " * Extracting '$file' and creating an executable symlink '$bin' ... "
+    rm -rf "$app_dir/$bin"
+    chmod u+x "$file" && "./$file" --appimage-extract &>/dev/null
+    mv 'squashfs-root' "$app_dir/$bin"
+    rm -f "$file"
+    ln -sf "$app_dir/$bin/AppRun" "$bin"
+    write-info "Done\n"
 
     write-info "Done.\n"
-    cd ..
+    cd - &>/dev/null
     return
 }
 
@@ -64,19 +82,25 @@ get-appimage-nightly()
 install-config()
 {
     [ $? -eq 1 ] && {
-        write-info "Skipping config installation due to error in getting appimage.\n"
+        write-info 'Skipping config installation due to error in getting appimage\n'
         return
     }
     [ $update == true ] && return
 
-    source="$1"; destination="$2"
+    # parameters
+    local source="$1"
+    local destination="$2"
+
     write-info "Installed config from '$source' to '$destination'\n"
     ln -sf "$source" "$destination"
 }
 
+# downloads and extracts an apt package to the programs directory
 apt-local-install()
 {
-    package="$1"; binary="$2"
+    # parameters
+    local package="$1"      # APT package name
+    local binary="$2"       # package binary name
 
     write-info "Installing $package ... "
     cd "$program_dir"
@@ -85,36 +109,63 @@ apt-local-install()
     dpkg -x "$deb" "$package"
     mv "$package/usr/bin/$binary" .
     rm -rf "$package" "$deb"
-    cd ..
+    cd - &>/dev/null
     write-info "Done.\n"
 }
 
-run-main()
-{
-    echo -en "${c_green}Executing script for PDE setup on Linux\n\n$c_none"
+####################### MAIN PIPELINE ######################
 
-    prepare-program-dir
+# parse the command-line arguments passed to it and issue relevant messages
+parse-arguments() {
+    # use getopt to parse arguments and show an error message if invalid arguments are found
+    local args="$(getopt --options h,u --longoptions no-wezterm -- "$@" 2>./getopt_error)"
+    [ $? -ne 0 ] && error 'Failed to parse command-line arguments'
+    local getopt_error_msg="$(cat ./getopt_error && rm ./getopt_error)"
+    [ -n "$getopt_error_msg" ] && { write-error "$getopt_error_msg" && show-help 1; }
 
-    # Install WezTerm (nightly) and its config
-    get-appimage-nightly 'wez/wezterm' 'WezTerm-nightly-Ubuntu20.04.AppImage' 'sha256' 'wezterm'
-    install-config "$PWD/wezterm" ~/.config
-    write-info "\n"
-
-    # Install Neovim (nightly) and its config
-    get-appimage-nightly 'neovim/neovim' 'nvim.appimage' 'sha256sum' 'nvim'
-    install-config "$PWD/nvim" ~/.config
-    write-info "\n"
-
-    # Install RipGrep locally
-    apt-local-install ripgrep rg
-    write-info "\n"
-
-    # Install all dotfiles
-    install-config "$PWD/dotfiles/.gitconfig" ~
-    install-config "$PWD/dotfiles/.bash_aliases" ~
-    [ $update != false ] || write-info "\n"
-
-    echo -en "${c_green}Completed PDE Setup\n$c_none"
+    # change the relevant globals based on the parsed arguments
+    eval "set -- $args"
+    for arg in $@; do
+        case "$arg" in
+            -h) show-help 0 ;;
+            -u) update=true ;;
+            --no-wezterm) no_wezterm=true ;;
+            --) ;;
+            *) write-error 'setup_linux.sh does not take any positional arguments' && show-help 1 ;;
+        esac
+    done
 }
 
+# main function that downloads and installs all programs
+run-main()
+{
+    echo -en "${c_GREEN}Executing script for PDE setup on Linux\n\n$c_NONE"
+
+    mkdir -p "$app_dir"
+
+    [ $no_wezterm == false ] && {
+        # install WezTerm (nightly) and its config
+        get-appimage-nightly 'wez/wezterm' 'WezTerm-nightly-Ubuntu20.04.AppImage' 'sha256' 'wezterm'
+        install-config "$PWD/wezterm" ~/.config
+        echo
+    }
+
+    # install Neovim (nightly) and its config
+    get-appimage-nightly 'neovim/neovim' 'nvim.appimage' 'sha256sum' 'nvim'
+    install-config "$PWD/nvim" ~/.config
+    echo
+
+    # install RipGrep locally
+    apt-local-install ripgrep rg
+    echo
+
+    # install all dotfiles
+    install-config "$PWD/dotfiles/.gitconfig" ~
+    install-config "$PWD/dotfiles/.bash_aliases" ~
+    [ $update == false ] && echo
+
+    echo -en "${c_GREEN}Completed PDE Setup\n$c_NONE"
+}
+
+parse-arguments $@
 run-main
