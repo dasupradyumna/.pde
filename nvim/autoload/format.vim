@@ -11,6 +11,10 @@ const s:bin = stdpath('data') .. '/mason/bin'
 const s:lua = { 'exe': s:bin .. '/stylua', 'config': 'stylua.toml',
             \ 'commands': [{-> [s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.')]}] }
 
+const s:python = { 'black': s:bin .. '/black', 'isort': s:bin .. '/isort',
+            \ 'commands': [{-> [s:python.black, expand('%:.')]},
+            \              {-> [s:python.isort, '--profile', 'black', expand('%:.')]}] }
+
 let s:enabled = v:true
 
 "----------------------------- FORMATTER FUNCTIONS ----------------------------"
