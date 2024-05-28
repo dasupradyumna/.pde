@@ -18,15 +18,14 @@ function! util#try_require(path)
     endtry
 endfunction
 
-" FIX: non-repo folders get empty string instead of null
 function! s:git_head_on_event(_, data, event) dict
     if a:event == 'stdout'
         let self.output ..= a:data->join()->trim()
     elseif a:event == 'exit'
-        if a:data && g:user->has_key('git_head')
-            call remove(g:user, 'git_head')
-        else
+        if !self.output->empty()
             let g:user.git_head = self.output
+        elseif g:user->has_key('git_head')
+            call remove(g:user, 'git_head')
         endif
     endif
 endfunction
