@@ -146,13 +146,13 @@ run-main()
     [ $no_wezterm == false ] && {
         # install WezTerm (nightly) and its config
         get-appimage-nightly 'wez/wezterm' 'WezTerm-nightly-Ubuntu20.04.AppImage' 'sha256' 'wezterm'
-        install-config "$PWD/wezterm" ~/.config
+        install-config "$PWD/wezterm" "$HOME/.config"
         echo
     }
 
     # install Neovim (nightly) and its config
     get-appimage-nightly 'neovim/neovim' 'nvim.appimage' 'sha256sum' 'nvim'
-    install-config "$PWD/nvim" ~/.config
+    install-config "$PWD/nvim" "$HOME/.config"
     echo
 
     # install RipGrep locally
@@ -160,8 +160,9 @@ run-main()
     echo
 
     # install all dotfiles
-    install-config "$PWD/dotfiles/.gitconfig" ~
-    install-config "$PWD/dotfiles/.bash_aliases" ~
+    install-config "$PWD/dotfiles/.gitconfig" "$HOME"
+    [ -z "$BASH_INIT_SOURCED" ] && \
+        echo -e "\nsource $PWD/dotfiles/bash/init.sh" | tee -a "$HOME/.bashrc"
     [ $update == false ] && echo
 
     echo -en "${c_GREEN}Completed PDE Setup\n$c_NONE"
