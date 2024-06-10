@@ -1,7 +1,7 @@
 ############################################ ENTRY POINT ###########################################
 
 # global flag to indicate that bash environment scripts have been sourced
-BASH_INIT_SOURCED=true
+export BASH_INIT_SOURCED=true
 
 curr_dir="$(dirname $(realpath "$BASH_SOURCE"))"
 

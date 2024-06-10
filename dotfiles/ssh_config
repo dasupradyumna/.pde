@@ -1,0 +1,9 @@
+# Refer to `man 5 ssh_config` for documentation about SSH configuration
+
+Host 1blr3-dev-sn1
+    HostName 10.72.99.83
+    User mtr
+
+Host 1sjc5-stage-sn1
+    HostName 172.20.1.13
+    User dvp
