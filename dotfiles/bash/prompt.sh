@@ -36,8 +36,12 @@ conda config --set changeps1 false &>/dev/null
 
 __prompt_job_status() { [ -n "$(jobs)" ] && { __render orange; echo -n '󰫢 '; }; }
 
-# XXX: display only in remote sessions or dev containers
-__prompt_user_host() { :; }
+__prompt_user_host() {
+    # HACK: to check if in SSH session (empty if local machine on Linux)
+    # also add support for docker containers
+    [ -n "$(who -m)" ] &&
+        { __render green; echo -n "[$(whoami)@$(hostname -f)] "; }
+}
 
 __prompt_cwd() {
     __render dark_blue
