@@ -3,19 +3,10 @@
 export PROMPT_COMMAND='
 __prompt_exit_status="$([ $? -eq 0 ] && echo none || echo red)"
 
-# taken from __git_ps1 function (/usr/lib/git-core/git-sh-prompt)
 # HACK: because upstream indicators are not separated from branch with a whitespace
-branch= head=
+__prompt_git_branch="$(__git_branch)"
 __prompt_git_state="$(__git_ps1 %s)"
-if [ -L '.git/HEAD' ]; then
-    branch="$(git symbolic-ref HEAD 2>/dev/null)"
-elif __git_eread '.git/HEAD' head; then
-    branch="${head#ref: }"
-    [ "$head" == "$branch" ] && branch="($(git describe --contains --all HEAD))"
-fi
-__prompt_git_branch="${branch##refs/heads/}"
 __prompt_git_state="${__prompt_git_state#$__prompt_git_branch}"
-unset -v branch head
 '
 
 # git prompt flags

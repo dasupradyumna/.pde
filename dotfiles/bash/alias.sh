@@ -14,15 +14,6 @@ alias cb='cd ~-'
 # quick open neovim
 alias e='nvim'
 
-# get git head of current folder (if it is repository)
-# 1. get tag of current commit
-# 2. get branch that HEAD points to
-# 3. fallback to get detached HEAD commit hash
-# --> fails silently otherwise
-alias git-head='git describe --tags --exact-match 2>/dev/null || \
-                git symbolic-ref -q --short HEAD 2>/dev/null || \
-                git rev-parse --short HEAD 2>/dev/null'
-
 # start jupyter-lab in the background suppressed output
 alias jl='jupyter-lab &>/dev/null &'
 
@@ -34,6 +25,19 @@ alias xcp='xclip -selection clipboard'
 
 # create and enter a directory
 mkcd() { mkdir -p "$1" && cd "$1"; }
+
+# internal helper for getting git head similar to __git_ps1 output
+__git_branch() {
+    local branch= head=
+    if [ -L '.git/HEAD' ]; then
+        branch="$(git symbolic-ref HEAD 2>/dev/null)"
+    elif __git_eread '.git/HEAD' head; then
+        branch="${head#ref: }"
+        [ "$head" == "$branch" ] && branch="($(git describe --contains --all HEAD))"
+    fi
+
+    echo -n "${branch##refs/heads/}"
+}
 
 ############################## PYTHON VENV HELPERS #############################
 

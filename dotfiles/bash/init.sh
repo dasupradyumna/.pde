@@ -10,10 +10,6 @@ curr_dir="$(dirname $(realpath "$BASH_SOURCE"))"
 # automatically change directory without using 'cd' command
 shopt -s autocd
 
-# expand aliases even in non-interactive shells
-# Reference: https://stackoverflow.com/a/18901595
-shopt -s expand_aliases
-
 #################### SOURCE SUB-MODULES ####################
 
 source "$curr_dir/render.sh"
