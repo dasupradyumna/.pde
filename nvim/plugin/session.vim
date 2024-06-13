@@ -2,6 +2,7 @@
 
 " standard data directory for all sessions
 const s:session_folder = stdpath('data') .. '/sessions'
+call mkdir(s:session_folder, 'p')
 
 let s:session = { 'disabled': v:false }
 
@@ -18,13 +19,15 @@ function! s:session.save()
     " tabs.nvim: save tabpage names
     lua require('tabs').save_to_global()
 
-    call mkdir(s:session_folder, 'p')
     execute 'mksession!' self.filepath
 endfunction
 
 function! s:session.load()
+    let head = util#git_head()
+    if !head->empty() | let head = '__' .. head | endif
+    let self.filepath = getcwd(-1, -1) .. head
     let self.filepath = printf('%s/%s.vim', s:session_folder,
-                \ getcwd(-1, -1)->substitute('@', '@@', 'g')->substitute('[/\:]', '@', 'g'))
+                \ self.filepath->substitute('@', '@@', 'g')->substitute('[/\:]', '@', 'g'))
 
     if self.disabled | return | endif
     if !filereadable(self.filepath) | echom 'No session found' | return | endif

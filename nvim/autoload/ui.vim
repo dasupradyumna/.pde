@@ -94,11 +94,7 @@ endfunction
 "--------------------------------- STATUSLINE ---------------------------------"
 
 function! s:statusline_git_head()
-    " CHECK: if dependency on shell command is feasible on Windows (PowerShell)
-    redir => head
-        silent !__git_branch
-    redir END
-    let head = head->split()[1]
+    let head = util#git_head()
     return head->empty() ? '' : '%#Operator# 󰊢 ' .. head
 endfunction
 

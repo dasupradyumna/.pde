@@ -25,3 +25,12 @@ function! util#matchstr(target, pattern, match_all = v:false)
     catch | return matches[1:]->filter({_,v-> !empty(v)})
     endtry
 endfunction
+
+function! util#git_head()
+    " CHECK: if dependency on shell command is feasible on Windows (PowerShell)
+    redir => head
+        try | silent !__git_branch
+        catch | endtry " HACK: ShellCmdPost autocommand in NetRW throws an error
+    redir END
+    return head->split()->get(1, '')
+endfunction
