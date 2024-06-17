@@ -1,6 +1,6 @@
 ------------------------------------- LANGUAGE SERVER PROTOCOL -------------------------------------
 
-local mason_tools = { 'lua-language-server', 'stylua', 'basedpyright', 'black', 'isort' }
+local mason_tools = { 'lua-language-server', 'stylua', 'basedpyright', 'black', 'isort', 'debugpy' }
 local installed_lsps = { lua = 'lua_ls', python = 'basedpyright' }
 
 return {
