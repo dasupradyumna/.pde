@@ -84,8 +84,8 @@ __prompt_python_env() {
     [ -n "$CONDA_DEFAULT_ENV" ] && echo -n "$(basename "$CONDA_DEFAULT_ENV") "
 }
 
-__prompt_character() { __render "$__prompt_exit_status"; echo -n ' '; __render none; }
+__prompt_character() { __render "$__prompt_exit_status"; echo -n '  '; }
 
 export PS1='
 $(__prompt_job_status)$(__prompt_user_host)$(__prompt_cwd)$(__prompt_git_info)
-$(__prompt_python_env)$(__prompt_character)'
+$(__prompt_python_env)$(__prompt_character)$(__render none)'
