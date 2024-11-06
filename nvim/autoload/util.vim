@@ -34,3 +34,15 @@ function! util#git_head()
     redir END
     return head->split()->get(1, '')
 endfunction
+
+function! util#toggle_spell()
+    let win = winnr()
+    let prev_tab = tabpagenr('$') == 1 ? 1 : tabpagenr('#')
+    let curr_tab = tabpagenr()
+
+    execute 'tabdo windo set' &spell ? 'nospell' : 'spell'
+
+    execute prev_tab .. 'tabnext'
+    execute curr_tab .. 'tabnext'
+    execute win .. 'wincmd w'
+endfunction

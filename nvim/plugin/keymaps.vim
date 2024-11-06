@@ -55,6 +55,11 @@ nnoremap <C-Down> <C-W>-
 nnoremap <C-Left> <C-W><
 nnoremap <C-Right> <C-W>>
 
+"------------------------------- TOGGLE-SETTINGS ------------------------------"
+
+nnoremap <Leader><Leader>d <Cmd>lua vim.diagnostic.enable(not vim.diagnostic.is_enabled())<CR>
+nnoremap <Leader><Leader>s <Cmd>call util#toggle_spell()<CR>
+
 "--------------------------------- DIAGNOSTICS --------------------------------"
 
 nnoremap gn <Cmd>lua vim.diagnostic.goto_next { float = false }<CR>
