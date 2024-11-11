@@ -8,8 +8,16 @@ return {
     config = function()
       local p = require('midnight.colors').palette
       local c = require('midnight.colors').components
+
       require('midnight').setup {
         WinBarBG = { fg = p.black, bg = c.bg },
+        WinBarDiagError = { fg = c.error, bg = c.bg },
+        WinBarDiagWarn = { fg = c.warn, bg = c.bg },
+        WinBarDiagInfo = { fg = c.info, bg = c.bg },
+        WinBarDiagHint = { fg = c.hint, bg = c.bg },
+        WinBarGitNew = { fg = p.green[4], bg = c.bg },
+        WinBarGitDirty = { fg = p.yellow[2], bg = c.bg },
+        WinBarGitDeleted = { fg = p.red[3], bg = c.bg },
         Folded = { bg = p.gray[8] },
         SpellCap = {},
         DiagnosticUnderlineOk = {},
@@ -17,6 +25,7 @@ return {
         DiagnosticUnderlineInfo = {},
         DiagnosticUnderlineWarn = {},
         DiagnosticUnderlineError = {},
+        ['@lsp.type.variable.lua'] = {},
         -- FIX: move to the colorscheme
         LazyReasonRequire = { link = 'Parameter' },
         MsgSeparator = { link = 'Border' },
@@ -25,7 +34,7 @@ return {
         ['@property.toml'] = { link = 'Parameter' }, -- to highlight/semantic/misc.lua
       }
 
-      vim.cmd.colorscheme 'midnight'
+      vim.api.nvim_command 'colorscheme midnight'
     end,
   },
   {

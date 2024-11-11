@@ -54,7 +54,7 @@ function! s:winbar_diagnostics_map(index, value)
     if a:value->empty() | return a:value | endif
 
     let [hl, icon] = s:diagnostic_render[a:index]
-    return printf('%%#Diagnostic%s#%s %d', hl, icon, a:value)
+    return printf('%%#WinBarDiag%s#%s %d', hl, icon, a:value)
 endfunction
 function! s:winbar_diagnostics()
     let diagnostics = v:lua.vim.diagnostic.count(0)
@@ -65,30 +65,22 @@ function! s:winbar_diagnostics()
                 \ ->insert('')->add('%#WinBarBG#')->join()
 endfunction
 
-const s:gitsigns_hl = { '+': 'GitNew', '~': 'GitDirty', '-': 'GitDeleted' }
+const s:gitsigns_hl = { '+': 'New', '~': 'Dirty', '-': 'Deleted' }
 function! s:winbar_gitsigns()
     let status = b:->get('gitsigns_status', '')->split()
     if status->empty() || util#is_diffview_tabpage() | return '' | endif
 
-    return status->map({_,v-> printf("%%#%s#%s", s:gitsigns_hl[v[0]], v)})
+    return status->map({_,v-> printf("%%#WinBarGit%s#%s", s:gitsigns_hl[v[0]], v)})
                 \ ->add('%#WinBarBG#')
                 \ ->join()
 endfunction
 
-function! s:winbar_filetype()
-    let filetype = &l:filetype
-    if filetype->match('^Diffview\|gitcommit') == 0 | return '' | endif
-
-    return printf('%%* %s ', filetype->empty() ? '-' : filetype->toupper())
-endfunction
-
 function! ui#winbar()
-    return printf(' %s %s   %%#WinBarBG#%s%%=%s%s',
+    return printf(' %s %s   %%#WinBarBG#%s%%=%s',
                 \ &l:modified ? '*' : ' ',
                 \ s:winbar_bufname(),
                 \ s:winbar_diagnostics(),
-                \ s:winbar_gitsigns(),
-                \ s:winbar_filetype())
+                \ s:winbar_gitsigns())
 endfunction
 
 "--------------------------------- STATUSLINE ---------------------------------"
@@ -110,6 +102,9 @@ function! ui#update_todo_stats(entries)
     endfor
 endfunction
 function! s:statusline_todo_stats()
+    " disable for the home directory
+    if getcwd() == $HOME | return '' | endif
+
     let [ok, config] = util#try_require('todo-comments.config')
     if !ok || !config.loaded | return '' | endif
 
@@ -155,8 +150,6 @@ function! ui#statuscolumn_fold()
                 \ : nvim_treesitter#foldexpr()[0] == '>'
         return foldclosed(v:lnum) > 0 ? '' : ''
     endif
-    " end of a fold
-    if foldlevel - 1 == foldlevel(v:lnum + 1) | return foldlevel == 1 ? '╰' : '├' | endif
-    " everywhere else
-    return foldlevel ? '│' : ' '
+
+    return ' '
 endfunction
