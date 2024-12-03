@@ -15,6 +15,11 @@ const s:python = { 'black': s:bin .. '/black', 'isort': s:bin .. '/isort',
             \ 'commands': [{-> [s:python.black, expand('%:.')]},
             \              {-> [s:python.isort, '--profile', 'black', expand('%:.')]}] }
 
+const s:rust = { 'exe': 'rustfmt', 'config': 'rustfmt.toml',
+            \ 'commands': [{->[s:rust.exe, '-q',
+            \                   '--config-path', s:config_resolver(s:rust.config), expand('%:.')]}]}
+
+" formatting is enabled by default
 let s:enabled = v:true
 
 "----------------------------- FORMATTER FUNCTIONS ----------------------------"

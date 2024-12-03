@@ -1,7 +1,8 @@
 ------------------------------------- LANGUAGE SERVER PROTOCOL -------------------------------------
 
 local mason_tools = { 'lua-language-server', 'stylua', 'basedpyright', 'black', 'isort', 'debugpy' }
-local installed_lsps = { lua = 'lua_ls', python = 'basedpyright' }
+-- XXX: rust-analyzer is installed using external rustup tool, not mason
+local installed_lsps = { lua = 'lua_ls', python = 'basedpyright', rust = 'rust_analyzer' }
 
 return {
   {
@@ -60,13 +61,6 @@ return {
 
       lspconfig.util.default_config = vim.tbl_extend('force', lspconfig.util.default_config, {
         -- make hover and signature help floating windows rounded
-        handlers = {
-          ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
-          ['textDocument/signatureHelp'] = vim.lsp.with(
-            vim.lsp.handlers.signature_help,
-            { border = 'rounded' }
-          ),
-        },
         on_attach = function(_, bufnr)
           local function nnoremap(lhs, rhs, args)
             ---@diagnostic disable-next-line: redefined-local
@@ -76,8 +70,8 @@ return {
 
           nnoremap('gd', vim.lsp.buf.definition, { reuse_win = true })
           nnoremap('gD', vim.lsp.buf.declaration, { reuse_win = true })
-          nnoremap('gh', vim.lsp.buf.hover)
-          nnoremap('gH', vim.lsp.buf.signature_help)
+          nnoremap('gh', vim.lsp.buf.hover, { border = 'rounded' })
+          nnoremap('gH', vim.lsp.buf.signature_help, { border = 'rounded' })
           nnoremap('gr', vim.lsp.buf.rename)
           nnoremap('gR', vim.lsp.buf.references)
           nnoremap('gs', vim.lsp.buf.document_symbol)
