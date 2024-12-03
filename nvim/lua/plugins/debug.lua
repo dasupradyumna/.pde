@@ -42,10 +42,11 @@ return {
         '<leader>dbl',
         function() dap.set_breakpoint(nil, nil, vim.fn.input 'Breakpoint log message: ') end
       )
-      -- nnoremap('<leader>dbL', function()
-      --   dap.list_breakpoints()
-      --   util.tele.quickfix()
-      -- end, '(dap) list breakpoints')
+      nnoremap('<leader>dbL', function()
+        dap.list_breakpoints()
+        vim.cmd.copen()
+        -- util.tele.quickfix()
+      end, '(dap) list breakpoints')
       nnoremap('<leader>dbC', dap.clear_breakpoints)
 
       -- session local debug keymaps

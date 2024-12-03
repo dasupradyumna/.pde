@@ -93,6 +93,12 @@ alias gr='git reset --hard HEAD'
 ############################## PYTHON VENV HELPERS #############################
 
 create-venv() {
+    if [ -d "$HOME/.venvs/$1" ]; then
+        __render red
+        echo "ERROR: Cannot create python virtual environment \"$1\" ; it already exists!"
+        return 1
+    fi
+
     python -m venv "$HOME/.venvs/$1" && echo "Created a python virtual environment \"$1\""
 }
 
@@ -111,7 +117,7 @@ delete-venv() {
         return 1
     elif [ ! -d "$venv_dir" ]; then
         __render red
-        echo "ERROR: Python environment \"$1\" does not exist!"
+        echo "ERROR: Python virtual environment \"$1\" does not exist!"
         return 1
     fi
 
@@ -128,7 +134,7 @@ delete-venv() {
         esac
     done
 
-    [ -n "$VIRTUAL_ENV" ] && deactivate
+    [ "$VIRTUAL_ENV" == "$venv_dir" ] && deactivate
     rm -rf "$venv_dir" && echo Done.
 }
 
@@ -140,7 +146,7 @@ activate-venv() {
         return 1
     elif [ ! -f "$activate_file" ]; then
         __render red
-        echo "ERROR: Python environment \"$1\" does not exist!"
+        echo "ERROR: Python virtual environment \"$1\" does not exist!"
         return 1
     fi
 

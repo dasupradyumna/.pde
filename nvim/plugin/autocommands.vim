@@ -37,8 +37,8 @@ augroup __user__
     autocmd BufWritePre * call s:trim_trailing_whitespace()
 
     " enable cursorline only in focused window
-    autocmd VimEnter,WinEnter,BufWinEnter * call s:switch_cursorline(v:true)
-    autocmd WinLeave,BufWinLeave * call s:switch_cursorline(v:false)
+    autocmd VimEnter,WinEnter * call s:switch_cursorline(v:true)
+    autocmd WinLeave * call s:switch_cursorline(v:false)
 
     if !exists('g:user.neovim_git_mode')
 
@@ -51,6 +51,7 @@ augroup __user__
         " display folds in statuscolumn when supported
         autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()
 
+        autocmd TermOpen * setlocal nospell nonumber
 
     endif
 augroup END

@@ -4,7 +4,8 @@
 
 map <Space> <NOP>
 map <BS> <NOP>
-inoremap <C-C> <Esc>
+noremap! <C-C> <Esc>
+vnoremap <C-C> <Esc>
 noremap ; :
 noremap : ;
 
@@ -36,6 +37,10 @@ xnoremap <Leader>cP "+P
 
 nnoremap <C-U> <C-U>zz
 nnoremap <C-D> <C-D>zz
+nnoremap H 5zh
+nnoremap L 5zl
+nnoremap 0 ^
+nnoremap ^ 0
 
 " search
 nnoremap n nzz

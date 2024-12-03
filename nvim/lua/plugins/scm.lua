@@ -33,6 +33,7 @@ return {
   {
     'sindrets/diffview.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
+    cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
     keys = {
       { '<Leader>gd', '<Cmd>DiffviewOpen<CR>', noremap = true },
       { '<Leader>gh', '<Cmd>DiffviewFileHistory<CR>', noremap = true },

@@ -12,7 +12,7 @@ const s:lua = { 'exe': s:bin .. '/stylua', 'config': 'stylua.toml',
             \ 'commands': [{-> [s:lua.exe, '-f', s:config_resolver(s:lua.config), expand('%:.')]}] }
 
 const s:python = { 'black': s:bin .. '/black', 'isort': s:bin .. '/isort',
-            \ 'commands': [{-> [s:python.black, expand('%:.')]},
+            \ 'commands': [{-> [s:python.black, '--line-length', '100', expand('%:.')]},
             \              {-> [s:python.isort, '--profile', 'black', expand('%:.')]}] }
 
 const s:rust = { 'exe': 'rustfmt', 'config': 'rustfmt.toml',

@@ -35,11 +35,11 @@ set matchpairs+=<:>
 set mouse=
 set report=0
 set scrolloff=4
-set sessionoptions=buffers,folds,globals,help,tabpages,winsize
+set sessionoptions=buffers,globals,help,tabpages,winsize
 set shortmess=aoOsIcCF
 set sidescrolloff=4
 set smartcase
-set spell spelloptions=camel
+set spelloptions=camel
 let &spellfile = s:config_path .. '/spell/en.utf-8.add'
 set splitbelow splitright
 set startofline
@@ -59,7 +59,7 @@ set display+=uhex
 set fillchars=diff:╳,eob:\ ,fold:\ ,msgsep:━
 set foldtext=
 set laststatus=3
-set list listchars=tab:──,trail:·
+set list listchars=leadmultispace:│\ \ \ ,tab:──,trail:· " HACK: temporary indenting
 set noruler nowrap
 set number numberwidth=2
 set showtabline=0

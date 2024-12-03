@@ -1,19 +1,7 @@
 ----------------------------------------- UTILITIES MODULE -----------------------------------------
--- CHECK: are the scheduler and throttle wrapper needed?
+-- CHECK: is throttle wrapper needed?
 
 local M = {}
-
----executes callback after the specified timeout
----@param timeout integer
----@param callback function
-function M.schedule_after(timeout, callback)
-  local timer = vim.uv.new_timer()
-  timer:start(timeout, 0, function()
-    timer:stop()
-    timer:close()
-    vim.schedule(callback)
-  end)
-end
 
 M.throttle = {
   ---@enum ThrottleStatus throttle wrapper status
@@ -49,9 +37,9 @@ M.throttle = {
         ---@cast self ThrottleWrapper
         if self.status ~= M.throttle.status.FREE then return end
 
-        M.schedule_after(
-          self.timeout,
-          function() self.status = self.status + M.throttle.status.TIMEOUT end
+        vim.defer_fn(
+          function() self.status = self.status + M.throttle.status.TIMEOUT end,
+          self.timeout
         )
 
         self.status = M.throttle.status.RUNNING
