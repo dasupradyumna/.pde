@@ -12,6 +12,7 @@ shopt -s autocd
 
 #################### SOURCE SUB-MODULES ####################
 
+source "$curr_dir/utils.sh"
 source "$curr_dir/render.sh"
 source "$curr_dir/alias.sh"
 source "$curr_dir/prompt.sh"

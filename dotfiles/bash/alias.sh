@@ -35,19 +35,6 @@ mkcd() { mkdir -p "$1" && cd "$1"; }
 # wezterm set tab title
 alias wstt='wezterm cli set-tab-title'
 
-# internal helper for getting git head similar to __git_ps1 output
-__git_branch() {
-    local branch= head= git_dir="$(git rev-parse --git-dir 2>/dev/null)"
-    if [ -L "$git_dir/HEAD" ]; then
-        branch="$(git symbolic-ref HEAD 2>/dev/null)"
-    elif __git_eread "$git_dir/HEAD" head; then
-        branch="${head#ref: }"
-        [ "$head" == "$branch" ] && branch="($(git describe --contains --all HEAD))"
-    fi
-
-    echo -n "${branch##refs/heads/}"
-}
-
 ################################## GIT ALIASES #################################
 # REMOVE: once lazygit workflow is setup
 
@@ -93,7 +80,11 @@ alias gr='git reset --hard HEAD'
 ############################## PYTHON VENV HELPERS #############################
 
 create-venv() {
-    if [ -d "$HOME/.venvs/$1" ]; then
+    if [ -z "$1" ]; then
+        __render red
+        echo 'ERROR: No python virtual environment specified!'
+        return 1
+    elif [ -d "$HOME/.venvs/$1" ]; then
         __render red
         echo "ERROR: Cannot create python virtual environment \"$1\" ; it already exists!"
         return 1
@@ -122,35 +113,28 @@ delete-venv() {
     fi
 
     # confirmation from user
-    local base="Delete the python virtual environment \"$1\"? (y/n) " invalid='Invalid choice! '
-    local msg="$base"
-    while true; do
-        read -p "$msg" choice
-        case "$choice" in
-            [yY]) break ;;
-            [nN]) echo Aborted.; return ;;
-            *) [ ${#msg} -eq ${#base} ] && msg="$invalid$base";
-                echo -en '\r\x1b[1A\x1b[0K' ;;  # moves cursor to and clears the previous line
-        esac
-    done
+    if ! __user_continue "Delete the python virtual environment \"$1\"?"; then return; fi
 
     [ "$VIRTUAL_ENV" == "$venv_dir" ] && deactivate
-    rm -rf "$venv_dir" && echo Done.
+    rm -r "$venv_dir" || return 1
 }
 
 activate-venv() {
-    local activate_file="$HOME/.venvs/$1/bin/activate"
+    local venv_dir="$HOME/.venvs/$1"
     if [ -z "$1" ]; then
         __render red
         echo 'ERROR: No python virtual environment specified!'
         return 1
-    elif [ ! -f "$activate_file" ]; then
-        __render red
-        echo "ERROR: Python virtual environment \"$1\" does not exist!"
-        return 1
+    elif [ ! -d "$venv_dir" ]; then
+        __render orange
+        echo "WARN: Python virtual environment \"$1\" does not exist!"
+        __render none
+
+        if ! __user_continue "Create one?"; then return; fi
+        create-venv "$1" || return 1
     fi
 
-    source "$activate_file"
+    source "$venv_dir/bin/activate"
 }
 
 # completion for above helpers listing existing environments
