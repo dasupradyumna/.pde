@@ -46,7 +46,7 @@ augroup __user__
         autocmd BufWinEnter * if &buftype != '' | setlocal colorcolumn= | endif
 
         " format buffers using the configured formatters
-        autocmd BufWritePost * call format#buffer() | call format#enable()
+        autocmd BufWritePost * call format#buffer()
 
         " display folds in statuscolumn when supported
         autocmd BufWinEnter * call s:set_statuscolumn_foldexpr()

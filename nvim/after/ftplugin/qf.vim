@@ -8,4 +8,7 @@ let b:user_ftplugin = 1
 execute b:undo_ftplugin
 
 " convenient exit
-nnoremap <buffer> q <Cmd>cclose<CR>
+nnoremap <buffer> q <Cmd>bwipeout<CR>
+
+" disable spell check
+setlocal nospell

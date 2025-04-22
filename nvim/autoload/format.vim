@@ -49,11 +49,4 @@ function! format#buffer()
             call v:lua.vim.notify("Formatting failed\n\n" .. output, 3) | return
         endif
     endfor
-
-    " checktime %
-    " BUG: to refresh treesitter folds after formatting
-    "      also save/restore fold state
-    let view = winsaveview()
-    edit %
-    call winrestview(view)
 endfunction
