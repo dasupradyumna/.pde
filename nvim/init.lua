@@ -30,3 +30,7 @@ require('lazy').setup('plugins', {
   install = { colorscheme = { 'retrobox' } },
   ui = { size = { width = 0.999, height = 0.95 }, border = 'rounded' },
 })
+
+vim.filetype.add {
+  filename = { ['docker.build-args'] = 'sh' },
+}

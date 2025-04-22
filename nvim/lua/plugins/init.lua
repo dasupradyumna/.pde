@@ -32,6 +32,7 @@ return {
         DiffviewDiffDelete = { fg = p.gray[7] },
         DiffviewDiffDeleteDim = { link = 'DiffviewDiffDelete' },
         ['@property.toml'] = { link = 'Parameter' }, -- to highlight/semantic/misc.lua
+        ['@lsp.type.const.rust'] = { link = 'Constant' },
       }
 
       vim.api.nvim_command 'colorscheme midnight'

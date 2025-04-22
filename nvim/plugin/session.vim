@@ -12,7 +12,19 @@ function! s:is_current_session_empty()
                 \ ->empty()
 endfunction
 
+function! s:get_session_filepath()
+    let head = util#git_head()
+    if !head->empty() | let head = '__' .. head | endif
+    let filepath = getcwd(-1, -1) .. head
+    let filepath = printf('%s/%s.vim', s:session_folder,
+                \ filepath->substitute('@', '@@', 'g')->substitute('[/\:]', '@', 'g'))
+
+    return filepath
+endfunction
+
 function! s:session.save()
+    let self.filepath = s:get_session_filepath()
+
     if self.disabled | return | endif
     if s:is_current_session_empty()  | call self.delete() | return | endif
 
@@ -23,11 +35,7 @@ function! s:session.save()
 endfunction
 
 function! s:session.load()
-    let head = util#git_head()
-    if !head->empty() | let head = '__' .. head | endif
-    let self.filepath = getcwd(-1, -1) .. head
-    let self.filepath = printf('%s/%s.vim', s:session_folder,
-                \ self.filepath->substitute('@', '@@', 'g')->substitute('[/\:]', '@', 'g'))
+    let self.filepath = s:get_session_filepath()
 
     if self.disabled | return | endif
     if !filereadable(self.filepath) | echom 'No session found' | return | endif
