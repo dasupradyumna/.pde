@@ -30,10 +30,16 @@ function! s:winbar_bufname()
     let bufname = expand('%:.')
 
     " handle help buffers
-    if &l:filetype == 'help' | return bufname->fnamemodify(':t:r') | endif
+    if &l:filetype == 'help' | return 'HELP: ' .. bufname->fnamemodify(':t:r') | endif
 
     " handle empty buffer
     if bufname->empty() | return '[ EMPTY ]' | endif
+
+    " handle terminal buffer
+    let terminfo = util#matchstr(bufname, '\v^term://(\f+)//\d+:(.+)$')
+    if !terminfo->empty()
+        return printf('TERM: (%s) %s', terminfo[0], terminfo[1])
+    endif
 
     " handle git commit message editor
     if bufname->match('\v^\.git[\\/]COMMIT_EDITMSG$') == 0 | return 'git-commit message' | endif

@@ -5,7 +5,7 @@
 map <Space> <NOP>
 map <BS> <NOP>
 noremap! <C-C> <Esc>
-vnoremap <C-C> <Esc>
+xnoremap <C-C> <Esc>
 noremap ; :
 noremap : ;
 
@@ -16,6 +16,7 @@ nnoremap <Leader>O O<Esc>
 nnoremap gh K
 nnoremap K i<CR><Esc>
 nnoremap U <C-R>
+nnoremap <C-R> <NOP>
 inoremap <Left> <C-G>U<Left>
 inoremap <Right> <C-G>U<Right>
 imap <C-H> <Left>
@@ -39,8 +40,8 @@ nnoremap <C-U> <C-U>zz
 nnoremap <C-D> <C-D>zz
 nnoremap H 5zh
 nnoremap L 5zl
-nnoremap 0 ^
-nnoremap ^ 0
+noremap 0 ^
+noremap ^ 0
 
 " search
 nnoremap n nzz
@@ -53,12 +54,23 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
+nnoremap <A-p> <C-W>p
+tnoremap <A-h> <C-\><C-N><C-W>hA
+tnoremap <A-j> <C-\><C-N><C-W>jA
+tnoremap <A-k> <C-\><C-N><C-W>kA
+tnoremap <A-l> <C-\><C-N><C-W>lA
+tnoremap <A-p> <C-\><C-N><C-W>pA
 
 " vertical and horizontal resizing
 nnoremap <C-Up> <C-W>+
 nnoremap <C-Down> <C-W>-
 nnoremap <C-Left> <C-W><
 nnoremap <C-Right> <C-W>>
+tnoremap <A-Up> <C-\><C-N><C-W>+A
+tnoremap <A-Down> <C-\><C-N><C-W>-A
+tnoremap <A-Left> <C-\><C-N><C-W><A
+tnoremap <A-Right> <C-\><C-N><C-W>>A
+tnoremap <A-=> <C-\><C-N><C-W>=A
 
 "------------------------------- TOGGLE-SETTINGS ------------------------------"
 
