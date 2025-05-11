@@ -7,7 +7,19 @@ return {
   {
     'ggandor/leap.nvim',
     cond = true,
-    keys = { 'c', 'd', 'v', 'y', 'f', 'F', 't', 'T', 'S', '<C-N>', '<C-P>' },
+    keys = {
+      'c',
+      'd',
+      'v',
+      'y',
+      '<Leader>f',
+      '<Leader>F',
+      '<Leader>t',
+      '<Leader>T',
+      'S',
+      '<C-N>',
+      '<C-P>',
+    },
     config = function()
       local config = require('leap').opts
       config.special_keys.next_target = '<C-N>'
@@ -15,10 +27,10 @@ return {
       require('leap.user').set_repeat_keys('<C-N>', '<C-P>')
 
       -- TODO: replace below with custom behavior using leap.leap() function
-      nxomap('f', '<Plug>(leap-forward-to)')
-      nxomap('F', '<Plug>(leap-backward-to)')
-      nxomap('t', '<Plug>(leap-forward-till)')
-      nxomap('T', '<Plug>(leap-backward-till)')
+      nxomap('<Leader>f', '<Plug>(leap-forward-to)')
+      nxomap('<Leader>F', '<Plug>(leap-backward-to)')
+      nxomap('<Leader>t', '<Plug>(leap-forward-till)')
+      nxomap('<Leader>T', '<Plug>(leap-backward-till)')
       nmap('S', '<Plug>(leap-from-window)')
     end,
   },

@@ -60,7 +60,6 @@ return {
       local lspconfig = require 'lspconfig'
 
       lspconfig.util.default_config = vim.tbl_extend('force', lspconfig.util.default_config, {
-        -- make hover and signature help floating windows rounded
         on_attach = function(_, bufnr)
           local function nnoremap(lhs, rhs, args)
             ---@diagnostic disable-next-line: redefined-local
@@ -68,6 +67,7 @@ return {
             vim.keymap.set('n', lhs, rhs, { buffer = bufnr })
           end
 
+          nnoremap('ga', vim.lsp.buf.code_action)
           nnoremap('gd', vim.lsp.buf.definition, { reuse_win = true })
           nnoremap('gD', vim.lsp.buf.declaration, { reuse_win = true })
           nnoremap('gh', vim.lsp.buf.hover, { border = 'rounded' })

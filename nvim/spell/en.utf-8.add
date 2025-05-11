@@ -109,3 +109,13 @@ upvalue
 sigterm
 gv
 libuv
+cwd
+msg
+pcall
+overridable
+env
+vsplit
+hsplit
+utils
+struct
+timestamp

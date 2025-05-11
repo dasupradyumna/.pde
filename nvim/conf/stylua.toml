@@ -1,4 +1,4 @@
-### Config for "stylua" formatter
+#------------------------------------------ STYLUA CONFIG -----------------------------------------#
 
 call_parentheses = 'None'
 collapse_simple_statement = 'Always'
