@@ -1,5 +1,8 @@
 ######################################## INTERNAL UTILITIES ########################################
 
+# needed for __git_ps1 and __git_eread
+source /usr/lib/git-core/git-sh-prompt
+
 # internal helper for getting git head similar to __git_ps1 output
 __git_branch() {
     local branch= head= git_dir="$(git rev-parse --git-dir 2>/dev/null)"
