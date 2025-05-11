@@ -140,7 +140,7 @@ parse-arguments() {
 install-pde() {
     echo -en "${c_GREEN}Executing script for PDE setup on Linux\n\n$c_NONE"
 
-    mkdir -p "$app_dir"
+    mkdir -p "$app_dir" "$HOME/.config" "$HOME/.ssh"
 
     if ! $NO_WEZTERM; then
         # install WezTerm (nightly) and its config
