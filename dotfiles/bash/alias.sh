@@ -8,17 +8,33 @@ alias ....='cd ../../..'
 # check and synchronize all installed packages
 alias apt-sync='sudo apt update && sudo apt upgrade && sudo apt autoremove'
 
-# change back to older directory silently
-alias cb='cd ~-'
+# directory stack helpers
+alias dls='dirs -v'
+alias dcd='pushd 1>/dev/null'
+alias drm='popd 1>/dev/null'
+alias dcn='pushd +1 1>/dev/null'
+alias dcp='pushd -0 1>/dev/null'
 
-# update modules in container
-dcp-mod() { docker cp "$1" "$2:/home/modules"; }
+# interactive bash in container
+dex() {
+    local container="$1" cmd
+    if [ -z "$container" ] || [ $# -gt 2 ]; then
+        echo -e '\e[31mUsage: dex <container_name> [command]\e[0m' && return
+    fi
+    [ $# -eq 1 ] && cmd=() || cmd=('-c' "$2")
+
+    [ -z "$(docker ps -q -f name="$container")" ] && docker start "$container" &>/dev/null
+    docker exec -it "$container" bash "${cmd[@]}"
+}
+__dex_complete() {
+    local containers="$(docker ps -a --format '{{.Names}}')"
+    COMPREPLY=()
+    [ $COMP_CWORD -eq 1 ] && COMPREPLY=($(compgen -W "$containers" "${COMP_WORDS[1]}"))
+}
+complete -F __dex_complete dex
 
 # quick open neovim
 alias e='nvim'
-
-# start jupyter-lab in the background suppressed output
-alias jl='jupyter-lab &>/dev/null &'
 
 # list the permissions of a file system object
 alias lsmod='stat --printf " object: %n\n perms:  0%a\n"'
