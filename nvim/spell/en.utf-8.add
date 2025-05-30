@@ -85,8 +85,6 @@ numpy
 opencv
 homography
 homographies
-#CAM
-#V
 params
 nav
 hcam
@@ -119,3 +117,9 @@ hsplit
 utils
 struct
 timestamp
+ROS
+lidar
+luna
+vimaan
+py
+dcam

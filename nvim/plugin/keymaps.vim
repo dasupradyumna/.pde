@@ -75,7 +75,7 @@ tnoremap <A-=> <C-\><C-N><C-W>=A
 "------------------------------- TOGGLE-SETTINGS ------------------------------"
 
 nnoremap <Leader><Leader>d <Cmd>lua vim.diagnostic.enable(not vim.diagnostic.is_enabled())<CR>
-nnoremap <Leader><Leader>s <Cmd>call util#toggle_spell()<CR>
+nnoremap <Leader><Leader>s <Cmd>let &l:spell = ! &l:spell<CR>
 
 "--------------------------------- DIAGNOSTICS --------------------------------"
 
