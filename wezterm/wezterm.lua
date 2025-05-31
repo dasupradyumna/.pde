@@ -1,11 +1,19 @@
+--------------------------------------- WEZTERM CONFIGURATION --------------------------------------
+
 local wezterm = require 'wezterm'
+
+-- Debug logging for wezterm
+DEBUG_WEZTERM = false
+function DEBUG(...)
+  if DEBUG_WEZTERM then wezterm.log_info(...) end
+end
 
 -- switches between the argument values based on system OS
 local function win_linux(windows_value, linux_value)
   return wezterm.target_triple == 'x86_64-pc-windows-msvc' and windows_value or linux_value
 end
 
-local config = {}
+local config = wezterm.config_builder()
 
 -- core
 config.default_prog = { win_linux([[C:\Program Files\PowerShell\7\pwsh.exe]], '/usr/bin/bash') }
@@ -29,7 +37,7 @@ config.color_scheme = 'Midnight'
 
 -- windows
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
-config.window_decorations = 'RESIZE'
+config.window_decorations = 'NONE'
 wezterm.on('update-status', function(window)
   local palette = window:effective_config().resolved_palette
 
@@ -42,7 +50,7 @@ wezterm.on('update-status', function(window)
 
   window:set_right_status(wezterm.format {
     { Foreground = { Color = palette.ansi[5] } },
-    { Text = ('%s '):format(wezterm.strftime '%H:%M %a %d %b %Y') },
+    { Text = ('%s '):format(wezterm.strftime '%H:%M:%S %a %d %b %Y') },
   })
 end)
 
@@ -52,14 +60,44 @@ config.switch_to_last_active_tab_when_closing_tab = true
 config.tab_max_width = 25
 config.use_fancy_tab_bar = false
 wezterm.on('format-tab-title', function(tab)
+  DEBUG(
+    ('tab_title:[%s] is_active:[%s] pane_title:[%s] foreground_process_name:[%s] domain_name:[%s]'):format(
+      tab.tab_title,
+      tab.is_active,
+      tab.active_pane.title,
+      tab.active_pane.foreground_process_name,
+      tab.active_pane.domain_name
+    )
+  )
+
+  local title = tab.tab_title
+  if #title == 0 then
+    if tab.active_pane.domain_name ~= 'local' then
+      title = tab.active_pane.domain_name
+    else
+      title = tab.active_pane.foreground_process_name:match '^.+/(.*)$'
+    end
+  end
   local title_format = tab.is_active and ' %s ' or '  %s  '
-  return title_format:format(tab.active_pane.foreground_process_name:match '^.+/(.*)$')
+  return title_format:format(title)
 end)
 
 -- panes
-config.inactive_pane_hsb = { saturation = 0.9, brightness = 0.8 } -- CHECK:
+config.inactive_pane_hsb = { saturation = 0.8, brightness = 0.7 }
 
 -- keybindings
 -- config.disable_default_mouse_bindings = true
+config.keys = {
+  {
+    key = 'D',
+    mods = 'CTRL|SHIFT',
+    -- FIX: this tab title is not showing up
+    action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|DOMAINS', title = 'launch-domain' },
+  },
+}
+
+-- domains
+-- FIX: exec domain does not set tab title
+config.exec_domains = require('exec_domains').docker()
 
 return config
