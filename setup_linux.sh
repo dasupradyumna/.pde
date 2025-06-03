@@ -104,23 +104,23 @@ install_wezterm() {
 }
 
 apt_install() {
-    local package="$1" binary="$2"
+    local pkg="$1" binary="$2"
 
     # System installation
     if $SYSTEM_INSTALL; then
-        sudo apt-get install -y "$package" || log -E "Failed to install $package to system"
-        log -i "Successfully installed $package to system"
+        sudo apt-get install -y "$pkg" &>/dev/null || log -E "Failed to install $pkg to system"
+        log -i "Installed APT package $pkg to system"
         return
     fi
 
     # Local installation
     cd bin
-    apt download "$package" &>/dev/null || log -E "Failed to download $package APT package"
-    local deb_file="$(find -type f -name "$package*.deb")"
-    dpkg -x "$deb_file" "$package" || log -E "Failed to extract $package APT package"
-    mv "$package/usr/bin/$binary" .
-    rm -rf "$package" "$deb_file"
-    log -i "Successfully installed $package to '$PWD'"
+    apt download "$pkg" &>/dev/null || log -E "Failed to download $pkg APT package"
+    local deb_file="$(find -type f -name "$pkg*.deb")"
+    dpkg -x "$deb_file" "$pkg" || log -E "Failed to extract $pkg APT package"
+    mv "$pkg/usr/bin/$binary" .
+    rm -rf "$pkg" "$deb_file"
+    log -i "Installed APT package $pkg to '$PWD'"
     cd ..
 }
 
@@ -128,8 +128,8 @@ install_neovim() {
     echo && log -i 'Installing Neovim ...'
 
     # Ensure Neovim dependencies are installed
-    command -v rg &>/dev/null || apt_install ripgrep rg
-    command -v xclip &>/dev/null || apt_install xclip xclip
+    apt_install ripgrep rg
+    apt_install xclip xclip
 
     # Clone Neovim repository
     git clone --depth 1 https://github.com/neovim/neovim.git

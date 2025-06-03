@@ -28,10 +28,10 @@ conda config --set changeps1 false &>/dev/null
 __prompt_job_status() { [ -n "$(jobs)" ] && { __render orange; echo -n '󰫢 '; }; }
 
 __prompt_user_host() {
-    # HACK: to check if in SSH session (empty if local machine on Linux)
-    # also add support for docker containers
-    [ -n "$(who -m)" ] &&
-        { __render green; echo -n "[$(whoami)@$(hostname -f)] "; }
+    # HACK: Check if in SSH session or inside a Docker container
+    if [ -n "$(who -m)" ] || [ -f "/.dockerenv" ]; then
+        __render green; echo -n "[$(whoami)@$(hostname)] ";
+    fi
 }
 
 __prompt_cwd() {

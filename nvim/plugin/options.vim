@@ -8,7 +8,8 @@ if has('win32')
     " HACK: excluding drive modifier on Windows works for 'spellfile' option
     let s:config_path = s:config_path[2:]
 elseif has('linux')
-    let $BASH_ENV = '~/.pde/dotfiles/bash/__nvim_bash_env.sh'
+    set shell=/bin/bash
+    let $BASH_ENV = expand('~/.pde/dotfiles/bash/__nvim_bash_env.sh')
 endif
 
 "--------------------------------- EDIT-FORMAT --------------------------------"
