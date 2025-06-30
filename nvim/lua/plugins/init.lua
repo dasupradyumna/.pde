@@ -26,7 +26,7 @@ return {
         DiagnosticUnderlineWarn = {},
         DiagnosticUnderlineError = {},
         ['@lsp.type.variable.lua'] = {},
-        CodeiumSuggestion = { fg = c.tabsel },
+        NeoCodeiumSuggestion = { fg = c.tabsel, style = 'italic' },
         -- FIX: move to the colorscheme
         LazyReasonRequire = { link = 'Parameter' },
         MsgSeparator = { link = 'Border' },
