@@ -55,7 +55,7 @@ log() {
 parse_opts() {
     # Modify variables based on options
     abspath() { echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; }
-    while getopts ':hsuUW' option; do
+    while getopts ':hsuTUW' option; do
         case "$option" in
             h) show_help 0 ;;
             s) SYSTEM_INSTALL=true; INSTALL_DIR=/usr/local ;;
@@ -216,7 +216,9 @@ install_pde() {
     mkdir -p "$INSTALL_DIR/bin" ~/.config ~/.ssh
 
     # Check if Git is accessible
-    ssh -T git@github.com 1>/dev/null || log -E 'Failed to connect to GitHub via SSH'
+    if ! ssh -T git@github.com 2>&1 | grep -q 'successfully authenticated'; then
+        log -E 'Failed to connect to GitHub via SSH'
+    fi
 
     # Install programs
     local pde_dir="$PWD"

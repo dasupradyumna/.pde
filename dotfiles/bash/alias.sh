@@ -64,8 +64,10 @@ complete -W "${__server_list[*]}" s
 mdh() {
     local cred usage='Usage: mdh LOCATION MODE [SRC] [DST]
     LOCATION : ( blr:XXX | sjc:XXX | ops ) - XXX is last octet of IP address
-    MODE : ( ssh | scp ) - Specify SRC and DST only in "scp" mode
-                         - Prefix SRC or DST with "mdh:" to indicate MDH path'
+    MODE : ( login | push | pull ) - "login" opens interactive SSH session (SRC and DST ignored)
+                                   - "push" copies local SRC to remote DST
+                                   - "pull" copies remote SRC to local DST
+                                   - Specify SRC and DST only in "push" or "pull" modes'
 
     case "$1" in
         blr:*|sjc:*)
@@ -75,23 +77,26 @@ mdh() {
             fi
             [ "${1%%:*}" == 'blr' ] && cred="$user@10.72.99.$octet" || cred="$user@172.20.2.$octet"
             ;;
-        ops) cred='daniel@172.20.4.118' ;;
+        'ops') cred='daniel@172.20.4.118' ;;
         *) echo -e "\e[31mInvalid MDH location!\n$usage\e[0m" && return 1 ;;
     esac
 
     case "$2" in
-        ssh) sshpass -p 'svdrone17' ssh "$cred" ;;
-        # TODO: add support for remote-remote transfer
-        scp) local src="$3" dst="$4"
+        'login') sshpass -p 'svdrone17' ssh "$cred"
+            ;;
+        'push'|'pull')
+            local src="$3" dst="$4"
             if [ -z "$src" ] || [ -z "$dst" ]; then
-                echo -e "\e[31mMissing SCP src/dst paths!\n$usage\e[0m" && return 1
+                echo -e "\e[31mMissing SRC/DST paths for '$2' mode!\n$usage\e[0m" && return 1
             fi
-            [ "${src:0:4}" == 'MDH:' ] && src="$cred:${src:4}"
-            [ "${dst:0:4}" == 'MDH:' ] && dst="$cred:${dst:4}"
-            # TODO: how to display progress bar? scp disables it if not writing to terminal
-            sshpass -p 'svdrone17' scp -r -v "$src" "$dst" 2>&1 | \
-                grep -vE '^OpenSSH|^Auth|debug1|^Sink|^Bytes' ;;
-        *) echo -e "\e[31mInvalid mode!\n$usage\e[0m" && return 1 ;;
+
+            [ "$2" = "push" ] && dst="$cred:$dst" || src="$cred:$src"
+
+            sshpass -p 'svdrone17' \
+                rsync -avz --progress -e "ssh -o StrictHostKeyChecking=no" "$src" "$dst"
+            ;;
+        *) echo -e "\e[31mInvalid mode!\n$usage\e[0m" && return 1
+            ;;
     esac
 }
 __mdh_complete() {
@@ -100,9 +105,9 @@ __mdh_complete() {
         COMPREPLY=($(compgen -W 'blr: sjc: ops' "${COMP_WORDS[1]}"))
         compopt -o nospace
     elif [ "${COMP_WORDS[1]}" == 'ops' ] && [ $COMP_CWORD -eq 2 ]; then
-        COMPREPLY=($(compgen -W 'ssh scp' "${COMP_WORDS[2]}"))
+        COMPREPLY=($(compgen -W 'login push pull' "${COMP_WORDS[2]}"))
     elif [ "${COMP_WORDS[1]}" != 'ops' ] && [ $COMP_CWORD -eq 4 ]; then
-        COMPREPLY=($(compgen -W 'ssh scp' "${COMP_WORDS[4]}"))
+        COMPREPLY=($(compgen -W 'login push pull' "${COMP_WORDS[4]}"))
     else
         COMPREPLY=($(compgen -f "${COMP_WORDS[$COMP_CWORD]}"))
     fi
