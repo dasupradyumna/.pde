@@ -187,6 +187,8 @@ install_theme() {
     git clone --depth 1 git@github.com:vinceliuice/Graphite-gtk-theme tmp-graphite-theme
     cd tmp-graphite-theme
     ./install.sh --color dark --size compact --libadwaita --tweaks black rimless normal
+    # BUG: weird behavior ; check https://github.com/vinceliuice/Graphite-gtk-theme/issues/197
+    # sudo ./install.sh --color dark --gdm --tweaks black rimless normal
     cd ..
     log -i 'Installed Graphite theme to ~/.themes & its GTK4 assets to ~/.config/gtk-4.0'
 
