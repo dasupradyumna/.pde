@@ -1,35 +1,82 @@
+######################################## SSH CONFIGURATIONS ########################################
 # Refer to `man 5 ssh_config` for documentation about SSH configuration
 
-Host 1blr3-dev-sn1
-    HostName 10.72.99.83
-    User mtr
-    CertificateFile ~/.ssh/1blr3-dev-mtr-cert.pub
+############################## SUDO SERVER ACCESS ##############################
+# NOTE: placed here so that these are matched before the mtr Host with * suffix
 
-Host 1blr3-dev-sn2
-    HostName 10.72.99.71
-    User mtr
-    CertificateFile ~/.ssh/1blr3-dev-mtr-cert.pub
-
-Host 1blr3-dev-sn6
-    HostName 10.72.99.46
-    User mtr
-    CertificateFile ~/.ssh/1blr3-dev-mtr-cert.pub
-
-Host 1sjc5-stage-sn1
-    HostName 172.20.1.13
-    User dvp
-    CertificateFile ~/.ssh/1sjc5-dev-mtr-cert.pub
-
-Host 1sjc5-dev-sn2
-    HostName 172.20.1.34
-    User mtr
-    CertificateFile ~/.ssh/1sjc5-dev-mtr-cert.pub
-
-Host 1sjc5-dev-sn5
-    HostName 172.20.1.53
-    User mtr
-    CertificateFile ~/.ssh/1sjc5-dev-mtr-cert.pub
-
-Host 1sjc5-dev-sn5-sudo
-    HostName 172.20.1.53
+Host sjc-dev-sn5-sudo
     User vimaan
+
+############################## BLR-DEV CERTIFICATE #############################
+
+Host blr-dev-sn*
+    User mtr
+    CertificateFile ~/.ssh/blr-dev-mtr-cert.pub
+
+Host blr-dev-sn
+    HostName not.a.valid.host
+
+Host blr-dev-sn1
+    HostName 10.72.99.83
+
+Host blr-dev-sn2
+    HostName 10.72.99.71
+
+Host blr-dev-sn3
+    HostName 10.72.99.23
+
+Host blr-dev-sn4
+    HostName 10.72.99.25
+
+Host blr-dev-sn5
+    HostName 10.72.99.27
+
+Host blr-dev-sn6
+    HostName 10.72.99.46
+
+Host blr-dev-sn7
+    HostName 10.72.99.87
+
+############################## SJC-DEV CERTIFICATE #############################
+
+Host sjc-dev-sn*
+    User mtr
+    CertificateFile ~/.ssh/sjc-dev-mtr-cert.pub
+
+Host sjc-dev-sn
+    HostName not.a.valid.host
+
+Host sjc-dev-sn1
+    HostName 172.20.52.13
+
+Host sjc-dev-sn2
+    HostName 172.20.1.34
+
+Host sjc-dev-sn3
+    HostName 172.20.1.32
+
+Host sjc-dev-sn4
+    HostName 172.20.1.51
+
+Host sjc-dev-sn5*
+    HostName 172.20.1.53
+
+Host sjc-dev-sn6
+    HostName 172.20.1.57
+
+# TODO: what are sn21 & sn22 used for on 1sjc5-dev?
+
+############################# SJC-STAGE CERTIFICATE ############################
+
+Host sjc-stage-sn*
+    User dvp
+    CertificateFile ~/.ssh/sjc-stage-dvp-cert.pub
+
+Host sjc-stage-sn
+    HostName not.a.valid.host
+
+Host sjc-stage-sn1
+    HostName 172.20.1.13
+
+Host sjc-stage-sn1
+    HostName 172.20.1.15
