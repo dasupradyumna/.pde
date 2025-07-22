@@ -5,11 +5,12 @@
 ##################### GLOBAL VARIABLES #####################
 
 SYSTEM_INSTALL=false
-UPDATE=false
+SKIP_CONFIGS=false
 SKIP_THEME=false
 UNINSTALL=false
 SKIP_WEZTERM=false
 INSTALL_DIR=~/.local
+GIT_CLONE_PREFIX='git@github.com:'
 
 # Clean up Neovim source directory on exit
 set_exit_trap() {
@@ -21,10 +22,10 @@ set_exit_trap() {
 # Show help message and exit the script
 show_help() {
     echo '
-Usage: ./setup_ubuntu.sh [-hsuUW]
+Usage: ./setup_ubuntu.sh [-hsCTUW]
     -h : Show this help message
     -s : System install (/usr/local); if not set, fallback to user install (~/.local)
-    -u : Only update programs without copying configs or installing themes
+    -C : Skip copying configs
     -T : Skip installing theme and icons
     -U : Uninstall all programs and configs; if -s is set, uninstall from /usr/local
     -W : Skip installing wezterm
@@ -55,11 +56,11 @@ log() {
 parse_opts() {
     # Modify variables based on options
     abspath() { echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; }
-    while getopts ':hsuTUW' option; do
+    while getopts ':hsCTUW' option; do
         case "$option" in
             h) show_help 0 ;;
             s) SYSTEM_INSTALL=true; INSTALL_DIR=/usr/local ;;
-            u) UPDATE=true; SKIP_THEME=true ;;
+            C) SKIP_CONFIGS=true ;;
             T) SKIP_THEME=true ;;
             U) UNINSTALL=true ;;
             W) SKIP_WEZTERM=true ;;
@@ -79,7 +80,7 @@ parse_opts() {
 
     log -i "Parsing command-line options ...
     - SYSTEM_INSTALL: $SYSTEM_INSTALL
-    - UPDATE: $UPDATE
+    - SKIP_CONFIGS: $SKIP_CONFIGS
     - SKIP_THEME: $SKIP_THEME
     - UNINSTALL: $UNINSTALL
     - SKIP_WEZTERM: $SKIP_WEZTERM"
@@ -141,7 +142,7 @@ install_neovim() {
     apt_install xclip xclip
 
     # Clone Neovim repository
-    git clone --depth 1 git@github.com:neovim/neovim
+    git clone --depth 1 "${GIT_CLONE_PREFIX}neovim/neovim"
     log -i 'Cloned Neovim repository from GitHub'
     cd neovim
 
@@ -170,8 +171,8 @@ install_neovim() {
 
 # Copy a config file to its standard location via symlink
 copy_configs() {
-    $UPDATE && return
     local src="$1" dst="$2"
+    if $SKIP_CONFIGS; then log -i "Skipped copying: $src" && return; fi
 
     ln -sf "$src" "$dst"
     log -i "Copied config via symlink: $src -> $dst"
@@ -180,11 +181,13 @@ copy_configs() {
 # Install Graphite theme and Tela icons
 # CHECK: this function has not been tested and verified
 install_theme() {
+    if $SKIP_THEME; then echo && log -i 'Skipping theme and icons installation' && return; fi
+
     echo && log -i 'Installing GTK theme and icons ...'
     cd # Clone repositories to HOME temporarily
 
     # Clone Graphite theme
-    git clone --depth 1 git@github.com:vinceliuice/Graphite-gtk-theme tmp-graphite-theme
+    git clone --depth 1 "${GIT_CLONE_PREFIX}vinceliuice/Graphite-gtk-theme" tmp-graphite-theme
     cd tmp-graphite-theme
     ./install.sh --color dark --size compact --libadwaita --tweaks black rimless normal
     # BUG: weird behavior ; check https://github.com/vinceliuice/Graphite-gtk-theme/issues/197
@@ -193,7 +196,7 @@ install_theme() {
     log -i 'Installed Graphite theme to ~/.themes & its GTK4 assets to ~/.config/gtk-4.0'
 
     # Clone Tela icons
-    git clone --depth 1 git@github.com:vinceliuice/Tela-circle-icon-theme tmp-tela-icons
+    git clone --depth 1 "${GIT_CLONE_PREFIX}vinceliuice/Tela-circle-icon-theme" tmp-tela-icons
     cd tmp-tela-icons
     ./install.sh -c black
     cd ..
@@ -217,7 +220,8 @@ install_pde() {
 
     # Check if Git is accessible
     if ! ssh -T git@github.com 2>&1 | grep -q 'successfully authenticated'; then
-        log -E 'Failed to connect to GitHub via SSH'
+        echo && log -i 'Failed to connect to GitHub via SSH ; Falling back to HTTPS'
+        GIT_CLONE_PREFIX='https://github.com/'
     fi
 
     # Install programs
@@ -235,7 +239,7 @@ install_pde() {
         echo -e "\nsource $PWD/dotfiles/bash/init.sh" | tee -a ~/.bashrc 1>/dev/null
 
     # Install theme and icons
-    if ! $SKIP_THEME; then install_theme; fi
+    install_theme
 
     local end=$(date +%s)
     local elapsed="$(date --utc --date "@$((end - start))" +%H:%M:%S)"
