@@ -3,7 +3,7 @@
 ###################### TERMINAL COLORS #####################
 
 # FIX: update this with term colors after wezterm gets the same palette ??
-declare -A __render_styles=(
+declare -g -A __render_styles=(
     [none]='0'
     # color
     [blue]='38:2:130:207:255'

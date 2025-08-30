@@ -15,19 +15,21 @@ end
 
 local config = wezterm.config_builder()
 
+-- config.scrollback_lines = 100000
+
 -- core
 config.default_prog = { win_linux([[C:\Program Files\PowerShell\7\pwsh.exe]], '/usr/bin/bash') }
 config.exit_behavior = 'CloseOnCleanExit'
-config.exit_behavior_messaging = 'Terse'
+config.exit_behavior_messaging = 'Brief'
 config.automatically_reload_config = true
 
 -- font
 config.font_dirs = { 'fonts' }
 config.font_locator = 'ConfigDirsOnly'
 config.font = wezterm.font 'Hermit'
-config.font_size = 11.5
+config.font_size = 9
 config.underline_position = -4
-config.allow_square_glyphs_to_overflow_width = 'Never'
+-- config.allow_square_glyphs_to_overflow_width = 'Never'
 config.anti_alias_custom_block_glyphs = false
 
 -- colors
@@ -85,6 +87,7 @@ config.inactive_pane_hsb = { saturation = 0.8, brightness = 0.7 }
 
 -- keybindings
 -- config.disable_default_mouse_bindings = true
+-- add keymap to close current pane
 config.keys = {
   {
     key = 'D',

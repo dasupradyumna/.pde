@@ -154,7 +154,7 @@ function! ui#statuscolumn_fold()
     if util#is_diffview_tabpage()
                 \ ? foldlevel == foldlevel(v:lnum - 1) + 1
                 \ : nvim_treesitter#foldexpr()[0] == '>'
-        return foldclosed(v:lnum) > 0 ? '' : ''
+        return foldclosed(v:lnum) > 0 ? '' : ''
     endif
 
     return ' '

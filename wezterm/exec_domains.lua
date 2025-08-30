@@ -7,6 +7,7 @@ local docker = {}
 ---Return a list of docker container names
 ---@return table
 function docker.container_list()
+  -- TODO: check if docker is installed, config throws an error if not
   local docker_cmd = { 'docker', 'ps', '--all', '--format', '{{.Names}}' }
   local ok, stdout, error = wezterm.run_child_process(docker_cmd)
   if not ok then

@@ -55,7 +55,7 @@ set cmdwinheight=10
 set colorcolumn=+1
 set cursorlineopt=line
 let &diffopt = 'filler,context:3,vertical,closeoff,hiddenoff,foldcolumn:0,followwrap,internal,'
-            \ .. 'indent-heuristic,linematch:60,algorithm:histogram'
+            \ .. 'indent-heuristic,linematch:60,algorithm:histogram,inline:char'
 set display+=uhex
 set fillchars=diff:╳,eob:\ ,fold:\ ,msgsep:━
 set foldtext=
