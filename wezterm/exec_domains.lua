@@ -40,7 +40,7 @@ end
 function docker.exec_domains()
   local exec_domains = {}
   for _, name in ipairs(docker.container_list()) do
-    table.insert(exec_domains, wezterm.exec_domain('󰡖 ' .. name, docker.wrap_exec(name)))
+    table.insert(exec_domains, wezterm.exec_domain('  ' .. name, docker.wrap_exec(name)))
   end
   DEBUG('exec_domains:: Constructed exec domains', exec_domains)
   return exec_domains

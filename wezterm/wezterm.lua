@@ -85,6 +85,10 @@ end)
 -- panes
 config.inactive_pane_hsb = { saturation = 0.8, brightness = 0.7 }
 
+-- domains
+-- FIX: exec domain does not set tab title
+config.exec_domains = require('exec_domains').docker()
+
 -- keybindings
 -- config.disable_default_mouse_bindings = true
 -- add keymap to close current pane
@@ -98,9 +102,5 @@ config.keys = {
     },
   },
 }
-
--- domains
--- FIX: exec domain does not set tab title
-config.exec_domains = require('exec_domains').docker()
 
 return config
