@@ -55,22 +55,12 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <A-p> <C-W>p
-tnoremap <A-h> <C-\><C-N><C-W>hA
-tnoremap <A-j> <C-\><C-N><C-W>jA
-tnoremap <A-k> <C-\><C-N><C-W>kA
-tnoremap <A-l> <C-\><C-N><C-W>lA
-tnoremap <A-p> <C-\><C-N><C-W>pA
 
 " vertical and horizontal resizing
 nnoremap <C-Up> <C-W>+
 nnoremap <C-Down> <C-W>-
 nnoremap <C-Left> <C-W><
 nnoremap <C-Right> <C-W>>
-tnoremap <A-Up> <C-\><C-N><C-W>+A
-tnoremap <A-Down> <C-\><C-N><C-W>-A
-tnoremap <A-Left> <C-\><C-N><C-W><A
-tnoremap <A-Right> <C-\><C-N><C-W>>A
-tnoremap <A-=> <C-\><C-N><C-W>=A
 
 "------------------------------- TOGGLE-SETTINGS ------------------------------"
 
@@ -89,3 +79,21 @@ nnoremap go <Cmd>lua vim.diagnostic.open_float()<CR>
 nnoremap <Leader>ss <Cmd>call grep#search()<CR>
 nnoremap <Leader>sf <Cmd>call grep#search_filetype()<CR>
 nnoremap <Leader>sd <Cmd>call grep#search_directory()<CR>
+
+"---------------------------------- TERMINAL ----------------------------------"
+
+tnoremap <A-h> <C-\><C-N><C-W>hA
+tnoremap <A-j> <C-\><C-N><C-W>jA
+tnoremap <A-k> <C-\><C-N><C-W>kA
+tnoremap <A-l> <C-\><C-N><C-W>lA
+tnoremap <A-p> <C-\><C-N><C-W>pA
+tnoremap <A-Up> <C-\><C-N><C-W>+A
+tnoremap <A-Down> <C-\><C-N><C-W>-A
+tnoremap <A-Left> <C-\><C-N><C-W><A
+tnoremap <A-Right> <C-\><C-N><C-W>>A
+tnoremap <A-=> <C-\><C-N><C-W>=A
+
+tnoremap <C-;> <C-\><C-N>
+
+nnoremap <Leader>lg <Cmd>lua require('user.launch').lazygit()<CR>
+nnoremap <Leader>lc <Cmd>lua require('user.launch').cursor_agent()<CR>
